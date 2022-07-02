@@ -45,16 +45,34 @@ def calc_cs(E, Q2, fit_params, order):
 
     # Kinematic parameters:
     tau = Q2 / (4 * M * M)
-    theta = np.arccos(1 - M * Q2 / (E * (2 * M * E - Q2)))
+
+    '''
+    array = (1 - M * Q2 / (E * (2 * M * E - Q2)))
+    for idx, i in enumerate(array):
+        if abs(i) > 1:
+            print(idx)
+            array=np.delete(array, idx)
+            tau=np.delete(tau, idx)
+            F1=np.delete(F1, idx)
+            F2 = np.delete(F2, idx)
+            GE_dip = np.delete(GE_dip, idx)
+            GM_dip = np.delete(GM_dip, idx)
+    '''
+
+    theta = np.arccos((1 - M * Q2 / (E * (2 * M * E - Q2))))
     epsilon = 1.0 / (1 + 2 * (1 + tau) * np.tan(0.5 * theta) ** 2)
 
     # Calculate model form factors:
     F1, F2 = calc_ffs(Q2, fit_params, order)
-    GE = F1 - tau * kappa * F2
-    GM = F1 + kappa * F2
 
     # Calculate dipole form factors:
     GE_dip, GM_dip = dipole_ffs(Q2)
+
+
+    GE = F1 - tau * kappa * F2
+    GM = F1 + kappa * F2
+
+
 
     # Calculate reduced cross sections:
     cs = epsilon * GE ** 2 + tau * GM ** 2

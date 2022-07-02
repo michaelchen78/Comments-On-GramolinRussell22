@@ -1,0 +1,24 @@
+y1 
+
+            Estimate Std. Error t value Pr(>|t|)   
+(Intercept)  -0.9975     2.4344  -0.410  0.69156   
+slope 1.3328     0.3142   4.241  0.00217 **
+
+
+y2
+            Estimate Std. Error t value Pr(>|t|)   
+(Intercept)  -0.9948     2.4354  -0.408  0.69246   
+slope 1.3325     0.3144   4.239  0.00218 **
+
+
+y3
+            Estimate Std. Error t value Pr(>|t|)   
+(Intercept)  -1.0003     2.4362  -0.411  0.69097   
+slope 1.3334     0.3145   4.239  0.00218 **
+
+
+y4
+            Estimate Std. Error t value Pr(>|t|)   
+(Intercept)  -1.0036     2.4349  -0.412  0.68985   
+slope 1.3337     0.3143   4.243  0.00216 **
+
