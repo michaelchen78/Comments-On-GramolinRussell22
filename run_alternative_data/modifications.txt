@@ -1,0 +1,12 @@
+The following modifications have been made to fit.py: (all these changes were intended to be ineffectual, simply to allow for convenience.
+# [MOD 1A: N_NORM_PARAMS and BEAM_ENERGIES will be assigned in read_cs_data. Dummy values assigned here.]
+# [MOD 1B: code to create and assign values to BEAM_ENERGIES AND N_NORM_PARAMS, below]
+# [MOD 1C: returns N_NORM_PARAMS for run_alt_data.py]
+
+# [MOD 2A: pass specific file into read_cs_data]
+# [MOD 2B: specific file placed into panda method]
+# [MOD 2C: pass in data file, only return data]
+
+# [MOD 3A: return chi^2 values for alt_data_methods.py]
+
+# [MOD 4A: formatting for run_alt_data.py]

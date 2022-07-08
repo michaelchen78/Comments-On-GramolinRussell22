@@ -10,12 +10,13 @@ from scipy.optimize import least_squares
 
 from models import calc_cs, get_b2, get_init, get_radius
 
-N_NORM_PARAMS = 31  # Number of normalization parameters
-BEAM_ENERGIES = [180, 315, 450, 585, 720, 855]  # List of beam energies (in MeV)
+# [MOD 1A: N_NORM_PARAMS and BEAM_ENERGIES will be assigned in read_cs_data. Dummy values assigned here.]
+N_NORM_PARAMS = -1  # Number of normalization parameters
+BEAM_ENERGIES = []  # List of beam energies (in MeV)
 SPECTROMETERS = ["A", "B", "C"]  # List of spectrometers
 
 
-def read_cs_data():
+def read_cs_data(data_file_name):  # [MOD 2A: pass specific file into read_cs_data]
     """Read raw cross section data from CrossSections.dat into dictionary."""
     # Read specific columns from data file:
     cols = {
@@ -30,8 +31,36 @@ def read_cs_data():
         10: "norms",  # Specific combination of normalization parameters
     }
     data = pd.read_csv(
-        "data/CrossSections.dat", sep=" ", skiprows=1, usecols=cols.keys(), names=cols.values()
-    )
+        data_file_name, sep=" ", skiprows=1, usecols=cols.keys(), names=cols.values()
+    )  # [MOD 2B: specific file placed into panda method]
+
+    # [MOD 1B: code to create and assign values to BEAM_ENERGIES AND N_NORM_PARAMS, below]
+    # Create list of beam energies from data file, assign to BEAM_ENERGIES
+    set_of_beam_energies = set()
+    for x in data["E"]: set_of_beam_energies.add(x)
+    global BEAM_ENERGIES
+    BEAM_ENERGIES = list(set_of_beam_energies)
+
+    # Assigns to N_NORM_PARAMS the max # of normalization parameters
+    max_normalization_parameter_number = -1
+    for s in data["norms"]:
+        norm_string = str(s)
+        there_is_a_colon = False
+        colon_index = -1
+
+        for idx, element in enumerate(norm_string):
+            if element == ":":
+                there_is_a_colon = True
+                colon_index = idx
+        if there_is_a_colon: norm_string = norm_string[colon_index + 1:]  # assumes the larger number is after the colon
+        norm_int = int(norm_string)
+
+        if norm_int > max_normalization_parameter_number:
+            max_normalization_parameter_number = norm_int
+    global N_NORM_PARAMS
+    N_NORM_PARAMS = max_normalization_parameter_number
+    # [END OF MOD 1B]
+
     # Format normalization indices as lists:
     data["norms"] = [[int(i) for i in s.split(":")] for s in data["norms"]]
     # Add filler index:
@@ -44,7 +73,7 @@ def read_cs_data():
     assert np.all(data["norms"] <= N_NORM_PARAMS)
     data["cs_sysup"] = data["cs"] * data["systematic_scale"]
     data["cs_syslow"] = data["cs"] / data["systematic_scale"]
-    return data
+    return data, N_NORM_PARAMS  # [MOD 1C: returns N_NORM_PARAMS for run_alt_data.py]
 
 
 def calc_fit_cov(jacobian):
@@ -122,12 +151,15 @@ def group_validation(data, order, norms, reg_param):
             val_indices.append(list(np.where(bools)))
     running_train = 0
     running_test = 0
+    print(val_indices)
     for group in val_indices:
         train_data, test_data = split_data(data, group)
         _, chi2_train, chi2_test, _, _ = fit(train_data, test_data, order, reg_param, norms=norms)
         running_train += chi2_train
         running_test += chi2_test
     print("chi^2_train = {:.0f}, chi^2_test = {:.0f}".format(running_train / 17, running_test))
+    return int("{:.0f}".format(running_train / 17)), \
+        int("{:.0f}".format(running_test))  # [MOD 3A: return chi^2 values for alt_data_methods.py]
 
 
 def fit_systematic_variant(key, data, order, reg_param):
@@ -167,7 +199,7 @@ def main(order, reg_param):
     print("Model: N = {}, lambda = {}".format(order, reg_param))
 
     # Read the cross section data:
-    data = read_cs_data()
+    data = read_cs_data("data/CrossSections.dat")[0]  # [MOD 2C: pass in data file, only return data]
 
     # Fit the full dataset:
     best_params, chi2, _, L, cov = fit(data, data, order, reg_param)

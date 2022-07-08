@@ -1,0 +1,6 @@
+Cross-validation without regularization: 
+NoneValue of N, n, at which chi^2_test was minimized: 
+5Optimized regularization parameters: 
+[2, 213, 12, 31, 41, 34, 134, 13, 51, 345][2, 213, 12, 31, 41, 34, 134, 13, 51, 345]Cross-validation with optimized regularization: 
+NoneTable II: 
+25

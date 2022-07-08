@@ -2,18 +2,20 @@
 
 import matplotlib
 import matplotlib.pyplot as plt
+import matplotlib as mpl
+mpl.rcParams.update(mpl.rcParamsDefault)
 import numpy as np
 import pandas as pd
 
-import fit
+from EditedArticleCode import fit
 from models import calc_cs, calc_ffs, calc_ge_gm, calc_rho, dipole_ffs, get_b2, hbarc
 
 matplotlib.rcParams["text.usetex"] = True
-matplotlib.rcParams["font.size"] = 26
+matplotlib.rcParams["font.size"] = 13
 matplotlib.rcParams["font.family"] = "lmodern"
 matplotlib.rcParams["text.latex.preamble"] = r"\usepackage{lmodern}"
-matplotlib.rcParams["xtick.labelsize"] = 20
-matplotlib.rcParams["ytick.labelsize"] = 20
+matplotlib.rcParams["xtick.labelsize"] = 12
+matplotlib.rcParams["ytick.labelsize"] = 12
 
 # Number of samples to use when generating statistical uncertainty bands
 N_SAMPLES = 1000
@@ -175,7 +177,7 @@ def plot_rhos(data, order, reg_param):
 def plot_ge_gm(cs_data, R_data, order, reg_param):
     """Plot the Sachs electric and magnetic form factors."""
     params, cov = calc_params(cs_data, order, reg_param)
-    Q2_range = np.linspace(0, 1.4, 200)
+    Q2_range = np.linspace(0, 1, 100)
     GE, GM = calc_ge_gm(Q2_range, params, order)
 
     if fit.covariance_bad(cov):
@@ -240,51 +242,6 @@ def plot_ge_gm(cs_data, R_data, order, reg_param):
     plt.ylabel(r"$G_{M} / (\mu \, G_{\mathrm{dip}})$")
 
 
-    #
-    #
-    # Form Factor Ratio
-    #
-    #
-    fig = plt.figure(dpi=150,figsize=(12,6))
-    plt.xlim(0,1.4)
-    plt.ylim(0.,1.05)
-    plt.ylabel(r"$\mu$ $G_{E}$/$G_{M}$")
-    plt.xlabel(r"Q$^2$ [GeV/c]$^2$")
-
-    fill_between(Q2_range, GE/(f2_up+interval[1,1]), GE/(-f2_low+interval[0,1]), "red")
-    fill_between(Q2_range, (f1_up+interval[1,0])/GM, (-f1_low+interval[0,0])/GM , "red")#,label="Gramolin")
-
-    fill_between(Q2_range, GE/(interval[1,1]), GE/(interval[0,1]), "#FFAAAA")
-    fill_between(Q2_range, (interval[1,0])/GM, (interval[0,0])/GM , "#FFAAAA")
-
-    plt.errorbar(cq2,cffratio, xerr=0, yerr=ctffratio, fmt='^', color='blue',lw=2,ms=8,zorder=666)
-    plt.plot(cq2,cffratio, '^', color='blue', \
-             label='Crawford',ms=8)
-
-    plt.errorbar(zq2,zffratio, xerr=0, yerr=ztffratio, fmt='o',color='purple',lw=2,ms=8,zorder=666 )
-    plt.plot(zq2,zffratio, 'o', color='purple', zorder=10, \
-             label='Zhan',ms=8)
-
-
-    plt.plot(vq2,vffratio, 's', color='darkorange', \
-             label='Punjabi',ms=8)
-    plt.errorbar(vq2,vffratio, xerr=0, yerr=vtffratio, fmt='s', color='darkorange',lw=2,ms=8,zorder=666)
-
-
-    plt.errorbar(pq2,pffratio, xerr=0, yerr=ptffratio, fmt='v', color='black',lw=2,ms=8,zorder=666)
-    plt.plot(pq2,pffratio,'v',color='black', \
-             label='Paolone',ms=10)
-
-    plt.plot(0, 1, color="red",label="Gramolin")
-
-    plt.legend(frameon=False,handletextpad=0.5)
-    plt.tight_layout()
-    plt.savefig("OriginalRatio.png")
-
-
-
-
-
 def plot_cs(data, order, reg_param):
     """Plot the measured cross sections with best fits."""
     params, _, _, _, _ = fit.fit(data, data, order, reg_param)
@@ -336,11 +293,12 @@ def save_fig(path):
     plt.savefig(path, bbox_inches="tight")
 
 
-def main(order, reg_param, dataFileName):
+def main(order, reg_param):
+
     print("Model: N = {}, lambda = {}".format(order, reg_param))
 
     # Read the cross section and Rosenbluth data:
-    cs_data = fit.read_cs_data(dataFileName)
+    cs_data = fit.read_cs_data()
     Rosenbluth_data = read_Rosenbluth_data()
 
     # Figure 1:
@@ -369,42 +327,9 @@ def main(order, reg_param, dataFileName):
     print("Plotting fitted cross sections...")
     plot_cs(cs_data, order, reg_param)
     save_fig("figures/fig_S2.pdf")
+    
     plt.show()
-
-
-# Data from X. Zhan et al., PLB 705 (2011) 59.
-zq2       = [ 0.298, 0.346, 0.402, 0.449, 0.494, 0.547, 0.599, 0.695 ]
-zffratio  = [ 0.927, 0.943, 0.932, 0.931, 0.929, 0.927, 0.908, 0.912 ]
-zeffratio = [ 0.011, 0.009, 0.007, 0.006, 0.005, 0.006, 0.005, 0.005 ]
-zsffratio = [ 0.007, 0.009, 0.008, 0.007, 0.008, 0.007, 0.010, 0.011 ]
-ztffratio = list(map(np.add,zeffratio,zsffratio))
-
-# Data from M. Paolone et al., PRL 105 (2010) 072001.
-pq2       = [ 0.800, 1.300 ]
-pffratio  = [ 0.901, 0.858 ]
-peffratio = [ 0.007, 0.008 ]
-psffratio = [ 0.010, 0.018 ]
-ptffratio = list(map(np.add,peffratio,psffratio))
-
-# Data from C. Crawford et al., PRL 98 (2007) 052301.
-cq2       = [ 0.162,0.191,0.232,0.282,0.345,0.419,0.500,0.591]
-cffratio  = [ 1.019,1.006,0.999,0.973,0.973,0.980,0.993,0.961]
-ceffratio = [ 0.013,0.012,0.012,0.012,0.014,0.016,0.019,0.025]
-csffratio = [ 0.015,0.014,0.012,0.011,0.010,0.009,0.008,0.007]
-ctffratio = list(map(np.add,ceffratio,csffratio))
-
-# Data from V. Punjabi et al., PRC 71 (2005) 055202.
-vq2       = [ 0.49,  0.79, 1.18, 1.48, 1.77, 1.88 ]
-vffratio  = [ 0.979, 0.951, 0.883, 0.798, 0.789, 0.777 ]
-veffratio = [ 0.016, 0.012, 0.013, 0.029, 0.024, 0.024 ]
-vsffratio = [ 0.006, 0.010, 0.018, 0.026, 0.035, 0.033 ]
-vtffratio = list(map(np.add,veffratio,vsffratio))
-
 
 if __name__ == "__main__":
     ARGS = fit.parse_args()
-    main(ARGS.order, ARGS.reg_param, "data/CrossSections.dat")
-    main(ARGS.order, ARGS.reg_param, "data/RebinnedCrossSectionsData.dat")
-    main(ARGS.order, ARGS.reg_param, "data/OG+PRadCrossSectionsData.dat")
-    main(ARGS.order, ARGS.reg_param, "data/Rebinned+PRadCrossSectionsData.dat")
-
+    main(ARGS.order, ARGS.best_reg_param)

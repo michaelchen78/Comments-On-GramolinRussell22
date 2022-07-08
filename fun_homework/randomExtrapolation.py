@@ -52,7 +52,7 @@ for i in range(len(xPrime)):
 
 
 plt.legend()
-#plt.show()
+plt.show()
 
 
 

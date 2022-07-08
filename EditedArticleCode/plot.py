@@ -2,6 +2,8 @@
 
 import matplotlib
 import matplotlib.pyplot as plt
+import matplotlib as mpl
+mpl.rcParams.update(mpl.rcParamsDefault)
 import numpy as np
 import pandas as pd
 
@@ -292,6 +294,7 @@ def save_fig(path):
 
 
 def main(order, reg_param):
+
     print("Model: N = {}, lambda = {}".format(order, reg_param))
 
     # Read the cross section and Rosenbluth data:
@@ -324,7 +327,8 @@ def main(order, reg_param):
     print("Plotting fitted cross sections...")
     plot_cs(cs_data, order, reg_param)
     save_fig("figures/fig_S2.pdf")
-
+    
+    plt.show()
 
 if __name__ == "__main__":
     ARGS = fit.parse_args()

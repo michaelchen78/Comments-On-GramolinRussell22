@@ -1,0 +1,16 @@
+- reosenbluth?
+- their training means they fit to 17, and test it on the 1 right?
+
+
+same lambda only because similar? fuck fuck fuck
+why were they similar?
+
+str(s) -- why didn't this break the alt run test?
+
+why did they repeat lambdas? -- also u didnt get the stupid file writing thing to work, but i guess just dismiss?
+
+
+why did you start running it holy shit all you see is the thing?
+
+
+bema energie issue?
