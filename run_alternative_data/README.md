@@ -7,8 +7,7 @@ This repository contains the exact same code:
 > A. V. Gramolin and R. L. Russell, "Transverse charge density and the radius of the proton", [Phys. Rev. D **105**, 054004 (2022)](https://doi.org/10.1103/PhysRevD.105.054004)
 
 WITH THE FOLLOWING EXCEPTIONS:
-> Code additions: alt_data_methods.py AND run_alt_data.py
-> Modifications: a number of minor changes to fit.py have been made and commented. See modification.txt for full list.
+> Code additions: alt_data_methods.py AND run_alt_data.py. Modifications: a number of minor changes to fit.py have been made and commented. See modification.txt for full list.
 
 It contains a number of additional data sets:
 > J. C. Bernauer *et al.* (A1 Collaboration), [Phys. Rev. Lett. **105**, 242001 (2010)](https://doi.org/10.1103/PhysRevLett.105.242001) <br>
