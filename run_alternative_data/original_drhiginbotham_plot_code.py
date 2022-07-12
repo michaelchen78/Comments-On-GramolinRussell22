@@ -30,7 +30,6 @@ def read_Rosenbluth_data():
 def calc_interval(calc_func, x_range, param_list, order):
     """Calculate 68% ("1 sigma") percentile interval from param sample."""
     out = np.array([calc_func(x_range, param, order) for param in param_list])
-    print("INTERVA", np.percentile(out, (15.9, 84.1), 0))
     return np.percentile(out, (15.9, 84.1), 0)
 
 
@@ -277,8 +276,7 @@ def plot_ge_gm(cs_data, R_data, order, reg_param):
     plt.plot(pq2,pffratio,'v',color='black', \
              label='Paolone',ms=10)
 
-    #plt.plot(0, 1, color="red",label="Gramolin")
-    plt.plot(Q2_range, GE/GM, color="black", lw=1, alpha=0.7, label="Gramolin")
+    plt.plot(0, 1, color="red",label="Gramolin")
 
 
     plt.legend(frameon=False,handletextpad=0.5)
@@ -383,7 +381,6 @@ def main(order, reg_param, data_file_name):
 
 
 # Data from X. Zhan et al., PLB 705 (2011) 59.
-# https://reader.elsevier.com/reader/sd/pii/S0370269311012342?token=7AD5025DC4F9ECEEC89911837FAD59A46111F8FEFE59CC1952935760E5F7C7161D1D6D72623381E9735FE0272B2E6E95&originRegion=us-east-1&originCreation=20220712173056
 zq2       = [ 0.298, 0.346, 0.402, 0.449, 0.494, 0.547, 0.599, 0.695 ]
 zffratio  = [ 0.927, 0.943, 0.932, 0.931, 0.929, 0.927, 0.908, 0.912 ]
 zeffratio = [ 0.011, 0.009, 0.007, 0.006, 0.005, 0.006, 0.005, 0.005 ]
@@ -391,7 +388,6 @@ zsffratio = [ 0.007, 0.009, 0.008, 0.007, 0.008, 0.007, 0.010, 0.011 ]
 ztffratio = list(map(np.add,zeffratio,zsffratio))
 
 # Data from M. Paolone et al., PRL 105 (2010) 072001.
-# https://arxiv.org/abs/1002.2188
 pq2       = [ 0.800, 1.300 ]
 pffratio  = [ 0.901, 0.858 ]
 peffratio = [ 0.007, 0.008 ]
@@ -399,7 +395,6 @@ psffratio = [ 0.010, 0.018 ]
 ptffratio = list(map(np.add,peffratio,psffratio))
 
 # Data from C. Crawford et al., PRL 98 (2007) 052301.
-# https://arxiv.org/abs/nucl-ex/0609007
 cq2       = [ 0.162,0.191,0.232,0.282,0.345,0.419,0.500,0.591]
 cffratio  = [ 1.019,1.006,0.999,0.973,0.973,0.980,0.993,0.961]
 ceffratio = [ 0.013,0.012,0.012,0.012,0.014,0.016,0.019,0.025]

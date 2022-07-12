@@ -324,8 +324,9 @@ def main(order, reg_param):
     print("Plotting fitted cross sections...")
     plot_cs(cs_data, order, reg_param)
     save_fig("figures/fig_S2.pdf")
+    plt.show()
 
 
 if __name__ == "__main__":
     ARGS = fit.parse_args()
-    main(ARGS.order, ARGS.best_reg_param)
+    main(ARGS.order, ARGS.reg_param)

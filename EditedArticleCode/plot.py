@@ -332,4 +332,4 @@ def main(order, reg_param):
 
 if __name__ == "__main__":
     ARGS = fit.parse_args()
-    main(ARGS.order, ARGS.best_reg_param)
+    main(ARGS.order, ARGS.reg_param)

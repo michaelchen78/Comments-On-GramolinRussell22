@@ -172,10 +172,10 @@ def plot_rhos(data, order, reg_param):
         plt.text(1.1, 0.079, r"$\rho_2$", color="#0000FF")
 
 
-def plot_ge_gm(cs_data, R_data, order, reg_param):
+def plot_ge_gm(cs_data, order, reg_param, R_data=read_Rosenbluth_data(), Q2_max=1):  # [MOD: made rosenbluth data hard coded]
     """Plot the Sachs electric and magnetic form factors."""
     params, cov = calc_params(cs_data, order, reg_param)
-    Q2_range = np.linspace(0, 1, 100)
+    Q2_range = np.linspace(0, Q2_max, 100)
     GE, GM = calc_ge_gm(Q2_range, params, order)
 
     if fit.covariance_bad(cov):
@@ -191,6 +191,7 @@ def plot_ge_gm(cs_data, R_data, order, reg_param):
         # Calculate systematic uncertainties:
         f1_up, f1_low, f2_up, f2_low = calc_sys_bands(calc_ge_gm, Q2_range, cs_data, order, reg_param)
 
+    '''
     fig = plt.figure(figsize=(10, 3.5))
     plt.subplots_adjust(wspace=0.35)
 
@@ -229,6 +230,7 @@ def plot_ge_gm(cs_data, R_data, order, reg_param):
         fill_between(Q2_range, interval[0, 1], interval[0, 1] - f2_low, "red")
         # Plot the statistical band for G_M:
         fill_between(Q2_range, interval[1, 1], interval[0, 1], "#FFAAAA")
+        print(interval[1, 1] - GM, "\n", GM - interval[0, 1])
     # Plot the best-fit line for G_M:
     plt.plot(Q2_range, GM, color="black", lw=1, alpha=0.7)
 
@@ -238,6 +240,10 @@ def plot_ge_gm(cs_data, R_data, order, reg_param):
         plt.ylim(0.98, 1.09)
     plt.xlabel(r"$Q^2~\left(\mathrm{GeV}^2\right)$")
     plt.ylabel(r"$G_{M} / (\mu \, G_{\mathrm{dip}})$")
+    '''
+
+    return GE, GM, Q2_range, interval, f1_up, f1_low, f2_up, f2_low  # [MOD: to make plot_alt_data.py run]
+
 
 
 def plot_cs(data, order, reg_param):
@@ -295,7 +301,7 @@ def main(order, reg_param):
     print("Model: N = {}, lambda = {}".format(order, reg_param))
 
     # Read the cross section and Rosenbluth data:
-    cs_data = fit.read_cs_data()
+    cs_data = fit.read_cs_data("data/CrossSections.dat")[0]  # [MOD: MAKE COMPATIBLE WITH fit.read_cs_data()]
     Rosenbluth_data = read_Rosenbluth_data()
 
     # Figure 1:
@@ -313,19 +319,19 @@ def main(order, reg_param):
     plot_rhos(cs_data, order, reg_param)
     plt.text(0.9, 0.91, "(b)", transform=ax2.transAxes, fontsize=14)
 
-    save_fig("figures/fig_1.pdf")
+    # save_fig("figures/fig_1.pdf")
 
     # Figure S1 (electric and magnetic form factors):
     print("Plotting GE and GM...")
-    plot_ge_gm(cs_data, Rosenbluth_data, order, reg_param)
-    save_fig("figures/fig_S1.pdf")
+    plot_ge_gm(cs_data, order, reg_param)  # [MOD: edited accordingly]
+    # save_fig("figures/fig_S1.pdf")
 
     # Figure S2 (fitted cross sections):
     print("Plotting fitted cross sections...")
     plot_cs(cs_data, order, reg_param)
-    save_fig("figures/fig_S2.pdf")
+    # save_fig("figures/fig_S2.pdf")
 
 
 if __name__ == "__main__":
     ARGS = fit.parse_args()
-    main(ARGS.order, ARGS.best_reg_param)
+    main(ARGS.order, ARGS.reg_param)
