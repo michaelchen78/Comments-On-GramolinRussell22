@@ -10,10 +10,11 @@ from scipy.optimize import least_squares
 
 from models import calc_cs, get_b2, get_init, get_radius
 
-# [MOD 1A: N_NORM_PARAMS and BEAM_ENERGIES will be assigned in read_cs_data. Dummy values assigned here.]
+# [MOD 1A: N_NORM_PARAMS, BEAM_ENERGIES, SPECTROMETERS will be assigned in read_cs_data. Dummy values assigned here.]
 N_NORM_PARAMS = -1  # Number of normalization parameters
 BEAM_ENERGIES = []  # List of beam energies (in MeV)
-SPECTROMETERS = ["A", "B", "C"]  # List of spectrometers
+SPECTROMETERS = []  # List of spectrometers
+UNIVERSAL_COUNTER = 0
 
 
 def read_cs_data(data_file_name):  # [MOD 2A: pass specific file into read_cs_data]
@@ -34,12 +35,18 @@ def read_cs_data(data_file_name):  # [MOD 2A: pass specific file into read_cs_da
         data_file_name, sep=" ", skiprows=1, usecols=cols.keys(), names=cols.values()
     )  # [MOD 2B: specific file placed into panda method]
 
-    # [MOD 1B: code to create and assign values to BEAM_ENERGIES AND N_NORM_PARAMS, below]
+    # [MOD 1B: code to create and assign values to BEAM_ENERGIES AND N_NORM_PARAMS and SPECTROMETERS , below]
     # Create list of beam energies from data file, assign to BEAM_ENERGIES
     set_of_beam_energies = set()
     for x in data["E"]: set_of_beam_energies.add(x)
     global BEAM_ENERGIES
     BEAM_ENERGIES = list(set_of_beam_energies)
+
+    # Create list of spectrometers from data file, assign to SPECTROMETERS
+    set_of_spectrometers = set()
+    for x in data["spec"]: set_of_spectrometers.add(x)
+    global SPECTROMETERS
+    SPECTROMETERS = list(set_of_spectrometers)
 
     # Assigns to N_NORM_PARAMS the max # of normalization parameters
     max_normalization_parameter_number = -1
@@ -97,6 +104,11 @@ def covariance_bad(cov):
 
 def fit(train_data, test_data, order, reg_param, norms=None):
     """Fit and evaluate model with given training and test data."""
+    global UNIVERSAL_COUNTER  # WHAT ARE THESE EDITS?
+    if (reg_param == 0 or reg_param == 0.01) and UNIVERSAL_COUNTER % 10 == 0:
+        # print("globals (n, b, s): ", N_NORM_PARAMS, BEAM_ENERGIES, SPECTROMETERS)
+        # print("fit info (data, order, reg_param): ", train_data["cs"][0], order, reg_param)
+        UNIVERSAL_COUNTER += 1
 
     def residuals(params, data=train_data, regularization=True):
         """Objective function."""
@@ -144,11 +156,16 @@ def split_data(data, indices):
 
 def group_validation(data, order, norms, reg_param):
     """Perform 18-fold cross-validation by experimental group."""
+    # if reg_param == 0 or reg_param == 0.01:
+        # print("globals (n, b, s): ", N_NORM_PARAMS, BEAM_ENERGIES, SPECTROMETERS)
+        # print("group validation info (data, order, reg_param): ", data["cs"][0] , order, reg_param)
+
     val_indices = []
     for energy in BEAM_ENERGIES:
         for spectrometer in SPECTROMETERS:
             bools = np.logical_and(data["E"] == energy, data["spec"] == spectrometer)
-            val_indices.append(list(np.where(bools)))
+            if len(np.where(bools)[0]) > 0:  # [MOD 4A: delete empty groups]
+                val_indices.append(list(np.where(bools)))
     running_train = 0
     running_test = 0
     for group in val_indices:
@@ -156,10 +173,12 @@ def group_validation(data, order, norms, reg_param):
         _, chi2_train, chi2_test, _, _ = fit(train_data, test_data, order, reg_param, norms=norms)
         running_train += chi2_train
         running_test += chi2_test
-    #print("chi^2_train = {:.0f}, chi^2_test ={:.0f}".
-    # format(running_train / 17, running_test))  # [MOD 4A: formatting for run_alt_data.py]
-    return int("{:.0f}".format(running_train / 17)), \
-        int("{:.0f}".format(running_test))  # [MOD 3A: return chi^2 values for alt_data_methods.py]
+    # print("chi^2_train = {:.0f}, chi^2_test ={:.0f}".
+    #      format(running_train / 17, running_test))  # [MOD 4A: formatting for run_alt_data.py]
+    # return int("{:.0f}".format(running_train / 17)), \
+    #    int("{:.0f}".format(running_test))  # [MOD 3A: return chi^2 values for alt_data_methods.py]
+    print(running_train/17, running_test)
+    return (running_train / 17), running_test  # [MOD 3A: return chi^2 values for alt_data_methods.py]
 
 
 def fit_systematic_variant(key, data, order, reg_param):
@@ -199,7 +218,7 @@ def main(order, reg_param):
     print("Model: N = {}, lambda = {}".format(order, reg_param))
 
     # Read the cross section data:
-    data = read_cs_data("data/PRadAlone.dat")[0]  # [MOD 2C: pass in data file, only return data]
+    data = read_cs_data("data/OG+PRadCrossSectionsData.dat")[0]  # [MOD 2C: pass in data file, only return data]
 
     # Fit the full dataset:
     best_params, chi2, _, L, cov = fit(data, data, order, reg_param)

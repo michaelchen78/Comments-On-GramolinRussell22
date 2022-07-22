@@ -8,6 +8,8 @@ import pandas as pd
 import fit
 from models import calc_cs, calc_ffs, calc_ge_gm, calc_rho, dipole_ffs, get_b2, hbarc
 
+from scipy.stats import shapiro  # [MOD: FOR NORMALITY CHECK]
+
 matplotlib.rcParams["text.usetex"] = True
 matplotlib.rcParams["font.size"] = 13
 matplotlib.rcParams["font.family"] = "lmodern"
@@ -26,7 +28,7 @@ def read_Rosenbluth_data():
     return data
 
 
-def calc_interval(calc_func, x_range, param_list, order):
+def calc_interval(calc_func, x_range, param_list, order, Q2_range=np.linspace(0, 1.4, 200)):
     """Calculate 68% ("1 sigma") percentile interval from param sample."""
     out = np.array([calc_func(x_range, param, order) for param in param_list])
     return np.percentile(out, (15.9, 84.1), 0)
@@ -172,10 +174,10 @@ def plot_rhos(data, order, reg_param):
         plt.text(1.1, 0.079, r"$\rho_2$", color="#0000FF")
 
 
-def plot_ge_gm(cs_data, order, reg_param, R_data=read_Rosenbluth_data(), Q2_max=1):  # [MOD: made rosenbluth data hard coded]
+def plot_ge_gm(cs_data, order, reg_param, R_data=read_Rosenbluth_data(), Q2_max=1, precision=100):  # [MOD: made rosenbluth data hard coded]
     """Plot the Sachs electric and magnetic form factors."""
     params, cov = calc_params(cs_data, order, reg_param)
-    Q2_range = np.linspace(0, Q2_max, 100)
+    Q2_range = np.linspace(0, Q2_max, int(Q2_max*precision + 1))  # [MOD HERE]
     GE, GM = calc_ge_gm(Q2_range, params, order)
 
     if fit.covariance_bad(cov):
@@ -186,12 +188,45 @@ def plot_ge_gm(cs_data, order, reg_param, R_data=read_Rosenbluth_data(), Q2_max=
 
     # Calculate statistical uncertainties:
     if draw_confidence:
+        '''
+        # [MOD: ENSURING NORMALITY]
+        normal = False
+        counter = 0
+        min_normality_factor = 0.8  # the required percentage of normal Q^2
+        while not normal:
+            test_params = np.random.multivariate_normal(params, cov, size=N_SAMPLES)
+            out = np.array([calc_ge_gm(Q2_range, param, order) for param in test_params])
+            n_normal = 0
+            n_not_normal = 0
+            p_not_normal_samples = []
+            for q2 in range(len(Q2_range)):
+                ge_s_at_q2 = np.empty((1, 1000))
+                for idx, sample in enumerate(out):
+                    ge_s = sample[0]
+                    ge_s_at_q2[0][idx] = ge_s[q2]
+                stat, p = shapiro(ge_s_at_q2)
+                # print('stat=%.3f, p=%.3f\n' % (stat, p))
+                if p > 0.05:
+                    n_normal += 1
+                else:
+                    n_not_normal += 1
+                    p_not_normal_samples.append(p)
+            if n_normal >= min_normality_factor*len(Q2_range):
+                normal = True
+            counter += 1
+        # print("number of normal samples out of 200: ", n_normal, "\np's of not-normal samples: ",
+        #      p_not_normal_samples, "\niterations: ", counter)
+        print("Iterations to reach normal samples: ", counter)
+        print("Number of normal samples: ", n_normal)
+        params = test_params
+        '''
         params = np.random.multivariate_normal(params, cov, size=N_SAMPLES)
         interval = calc_interval(calc_ge_gm, Q2_range, params, order)
         # Calculate systematic uncertainties:
         f1_up, f1_low, f2_up, f2_low = calc_sys_bands(calc_ge_gm, Q2_range, cs_data, order, reg_param)
 
     '''
+    # [MOD: CLEAN]
     fig = plt.figure(figsize=(10, 3.5))
     plt.subplots_adjust(wspace=0.35)
 
