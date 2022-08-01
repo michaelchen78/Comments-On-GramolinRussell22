@@ -18,5 +18,3 @@ D: edit is not used by the comment, but allows the code to run as the original c
 Edit 4: changed import statement importing methods from models.py as models.py has a different relative path compared to the original folder; changed line 11
 
 
-notes: is this the correct way to do norms? 63 assumes 2nd number is larger (in finding largest)
-notes: is the 3C description adequate? WHAT IS HAPPENING IN THIS METHOD WITH THE BEST NORMS?
