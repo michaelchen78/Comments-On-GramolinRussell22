@@ -1,0 +1,19 @@
+Cross-validation without regularization: 
+[[      1       5     103]
+ [      2       5 3297012]
+ [      3       5  187482]]
+ Value of N, n, at which chi^2_test was minimized:
+1
+
+Optimized regularization parameters:
+[1 2 3][0, 0, 0]
+
+Cross-validation with optimized regularization:
+[[1.000000e+00 0.000000e+00 5.000000e+00 1.030000e+02]
+ [2.000000e+00 0.000000e+00 5.000000e+00 3.297012e+06]
+ [3.000000e+00 0.000000e+00 5.000000e+00 1.874820e+05]]
+
+ Table II:
+[[ 1.          0.         88.4414435  88.4414435   9.74296404  0.8294591 ]
+ [ 2.          0.         85.64830657 85.64830657  8.89483532  0.79904057]
+ [ 3.          0.         84.44700403 84.44700403 12.44523927  0.91969231]]

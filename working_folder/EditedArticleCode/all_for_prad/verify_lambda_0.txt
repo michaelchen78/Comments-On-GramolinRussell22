@@ -1,0 +1,66 @@
+N = 1, lambda = 0
+18-fold group cross-validation results:
+chi^2_train = 10, chi^2_test =0
+
+Results obtained using the full dataset:
+L = 88, chi^2 = 88
+
+Best-fit normalizations:
+[1.         1.         1.         1.         1.         1.
+ 1.         1.         1.         1.         1.         1.
+ 1.         1.         1.         1.         1.         1.
+ 1.         1.         1.         1.         1.         1.
+ 1.         1.         1.         1.         1.         1.
+ 1.         0.99958463 1.00339035]
+
+Extracted radii:
+<b1^2> = 9.74 +/- 0.33 (stat) +/- 0.00 (syst) 1/GeV^2
+r_E = 0.829 +/- 0.012 (stat) +/- 0.018 (syst) fm
+
+Warning: Covariance ill-conditioned, statistical uncertainty estimate unreliable
+
+
+
+N = 2, lambda = 0
+18-fold group cross-validation results:
+chi^2_train = 10, chi^2_test =0
+
+Results obtained using the full dataset:
+L = 86, chi^2 = 86
+
+Best-fit normalizations:
+[1.         1.         1.         1.         1.         1.
+ 1.         1.         1.         1.         1.         1.
+ 1.         1.         1.         1.         1.         1.
+ 1.         1.         1.         1.         1.         1.
+ 1.         1.         1.         1.         1.         1.
+ 1.         0.99990291 1.003909  ]
+
+
+Extracted radii:
+<b1^2> = 8.89 +/- 1.41 (stat) +/- 0.34 (syst) 1/GeV^2
+r_E = 0.799 +/- 0.051 (stat) +/- 0.012 (syst) fm
+
+
+
+N = 3, lambda = 0
+18-fold group cross-validation results:
+chi^2_train = 10, chi^2_test =0
+
+Results obtained using the full dataset:
+L = 84, chi^2 = 84
+
+Best-fit normalizations:
+[1.         1.         1.         1.         1.         1.
+ 1.         1.         1.         1.         1.         1.
+ 1.         1.         1.         1.         1.         1.
+ 1.         1.         1.         1.         1.         1.
+ 1.         1.         1.         1.         1.         1.
+ 1.         0.99917932 1.00291435]
+
+Extracted radii:
+<b1^2> = 12.45 +/- 3.89 (stat) +/- 0.00 (syst) 1/GeV^2
+r_E = 0.920 +/- 0.124 (stat) +/- 0.108 (syst) fm
+
+
+

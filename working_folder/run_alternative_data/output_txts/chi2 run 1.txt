@@ -1,0 +1,15 @@
+OG:  1244.9920172868392
+Rebinned:  1211.113570085985
+OG+PRad:  1064.7712967515358
+Rebinned+PRad:  899.1941779135054
+
+*only used Q2 up to 1.4
+chi2 = sum of the terms [for each asym_ff_ratio]: 
+
+(model_ff_ratio - asym_ff_ratio)^2 
+/
+(asym_error^2)
+
+
+
+where asym error are the statistical and systematic errors for each asym point ADDED IN QUADRATURE (wasn't sure about this)

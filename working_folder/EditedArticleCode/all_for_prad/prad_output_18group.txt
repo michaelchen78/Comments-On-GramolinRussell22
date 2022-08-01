@@ -1,0 +1,19 @@
+Cross-validation without regularization: [N, chi^2_train, chi^2_test]
+[[  1  88  99]
+ [  2  86 107]
+ [  3  84 127]]
+
+ Value of N, n, at which chi^2_test was minimized:1
+
+ Optimized regularization parameters:
+[1 2 3][0.4, 0.3, 0.7]
+
+Cross-validation with optimized regularization: [N, lambda, chi^2_train, chi^2_test]
+[[ 1.   0.4 88.  94. ]
+ [ 2.   0.3 88.  95. ]
+ [ 3.   0.7 88.  98. ]]
+
+ Table II: [N, lambda, L, chi^2, b^2_1, r_E]
+[[ 1.          0.4        88.54106478 88.45701934  9.74797641  0.82963556]
+ [ 2.          0.3        88.47681984 88.45773284  9.76249045  0.8301463 ]
+ [ 3.          0.7        88.49006112 88.45201133  9.75664621  0.82994068]]

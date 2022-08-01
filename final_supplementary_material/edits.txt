@@ -1,0 +1,22 @@
+NOTE: line changes refer to original file; for added lines, line changes include comments acting as edit labels
+All edits were made to fit.py (now modified_fit.py); different_input_sets.py is original code.
+
+Edit 1: make the data file read by read_cs_data() a parameter of the method
+A: add parameter to method signature; changed line 18
+B: edit is not used by the comment, but allows the code to run as the original code did; added one line above line 170, changed line 170
+
+Edit 2: determine constants from data file
+A: replace original initial values with None; changed lines: 13-15
+B: determines the values of the constants from the data file, assigns them; inserted 33 lines in between lines 34 and 35
+
+Edit 3: modifications to group_validation(data, order, norms, reg_param)
+A: the addition of the PRad data makes the logic invalid; empty arrays are added to val_indices because the new beam energies were never measured with the Mainz spectrometers, and the new spectrometer never measured with the Mainz energies; replaced line 122 with 3 lines (1 of which was the original line 122 indented)
+B: commented out print statement so different_input_sets.py output can be clean; added line above line 130, changed line 130
+C: added a return statement returing the un-rounded values of chi^2_train and chi^2_test, to be used in different_input_sets.py; inserted 2 lines underneath line 130
+D: edit is not used by the comment, but allows the code to run as the original code did; replaced line 180 with 3 lines
+
+Edit 4: changed import statement importing methods from models.py as models.py has a different relative path compared to the original folder; changed line 11
+
+
+notes: is this the correct way to do norms? 63 assumes 2nd number is larger (in finding largest)
+notes: is the 3C description adequate? WHAT IS HAPPENING IN THIS METHOD WITH THE BEST NORMS?

@@ -1,0 +1,17 @@
+with dQ^2 = 2.57*10^-4 fm^-2
+
+OG:
+rE = 0.8884 fm
+rM = 0.7462 fm
+
+Rebinned:
+rE = 0.8684
+rM = 0.7380
+
+OG+PRad:
+rE = 0.8601
+rM = 0.7702
+
+Rebinned+PRad:
+rE = 0.8409
+rM = 0.7557

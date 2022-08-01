@@ -1,0 +1,243 @@
+Explanation of the failure of first two runs:
+BB was running with 3 spectrometers and the 5 OG beam energies, MC was also running
+with 3 spectrometers but with the 2 PRad beam energies in addition to the 5 OG.
+
+BEAM_ENERGIES and SPECTROMETERS state:
+- so check to make sure of this after, run 1 by 1....
+and then try to figure out the results when you're not brain fucked fuck you
+was 0.01 the correct decision?
+- The test went down after adding spectrometer
+
+
+When run with 6 beam energies, 3 specs:
+18 groups are pulled out, the training data in each case is the 17 OG + the PRad. The test
+is these 18 OG groups against the fit on training data.
+
+When run with 8 beam energies, 3 specs:
+There are 6 empty arrays added by the for loop (+2 energies * 3 specs). The first 18 runs are
+the EXACT same. There are now 6 more iterations on empty test groups, thus leading to 6 more
+fits and chi_train's (which are on the entire data group), without adding to chi_test.
+
+When run with 8 beam energies, 4 specs:
+There are 8 arrays added, 6 are empty, 2 are full (for each beam energy, only the 2 PRad match).
+
+The question is why did test go down after adding spec P...?
+
+
+go over it all again -- ?
+esp the 1771, and then also the other thing you did at bool where -- PRad - -why
+didn't that shit work?
+data?
+THE ABOVE
+ur fucked right now, must look into it tomorrow, esp this last part and forgetting the old
+shit is scary so you must not you must not let this shit kill you you must succeed
+running it even though I'm not sure about it...? FUCK
+
+backupmakeupsomething?
+still dont check if equal...
+
+
+WHY ARE THE FUCKING NUMBERS ROUNDED?
+
+
+THEN STATS AGH
+
+they never explicitly define it as a Gaussian distribution
+I am assuming that the midpoint is the mean -- whic is fucked
+because they make the params they generate first as the mean
+and that should translate to a mean GE/GM which is weird
+
+no longer sure about the dark outer bands being just systematic?
+
+Assumption: their distribution is Gaussian
+Thus I can take mus and sigmas and find equivalent pdf
+
+Assumption: EACH Q2 is normally distributed, and everything from that
+It's like the idea that well they have arrays but really it is distributed according
+to each index and not some other thing...
+
+Assumption: dGE and dGM are uncorrelated
+
+The differences between our methods, e.g. me using mu + and - sigma for the final thing
+np.percentile the meaning? and the signficance?
+
+If the output pdf is not normal, it may be better to generate tables and then take 68%... the sigma
+of a not normal distribution may not be 68%....?
+Checking this... maybe check the assumption? overall very disappointed.
+
+
+The reasoning for systematic is that because Gramolin uses the standard, so do we
+
+OG and Rebinned + PRAD
+n-9 n-8 at 0
+
+
+
+THIRD RUN PARTIAL
+"C:\Users\Michael Chen\Downloads\radius-master\venv\Scripts\python.exe" C:/Desktop/pythonProjects/Comments-On-GrimolinRussel22/run_alternative_data/run_alt_data.py
+
+
+RUN:  RUN 1: OG DATA
+
+
+PROGRESS:
+
+performing cross validation without regularization...
+performing regularization parameter scan for each order N >= n...
+scanning for order:  5
+scanning for order:  6
+scanning for order:  7
+scanning for order:  8
+scanning for order:  9
+scanning for order:  10
+performing group validation with optimized regularization...
+DONE!
+
+
+
+Cross-validation without regularization:
+ [[   1 4933 5114]
+ [   2 1948 2029]
+ [   3 1876 2357]
+ [   4 1854 2255]
+ [   5 1573 1681]
+ [   6 1566 1702]
+ [   7 1556 1911]
+ [   8 1544 2059]
+ [   9 1544 2060]
+ [  10 1544 2060]]
+Value of N, n, at which chi^2_test was minimized:  5
+Optimized regularization parameters:
+ [ 5  6  7  8  9 10] [0.02, 0.07, 0.19, 0.37, 0.37, 0.37]
+Cross-validation with optimized regularization:
+ [[5.00000000e+00 2.00000000e-02 1.57406790e+03 1.65739089e+03]
+ [6.00000000e+00 7.00000000e-02 1.57132594e+03 1.66419920e+03]
+ [7.00000000e+00 1.90000000e-01 1.56974191e+03 1.67150764e+03]
+ [8.00000000e+00 3.70000000e-01 1.56870232e+03 1.67929735e+03]
+ [9.00000000e+00 3.70000000e-01 1.56870232e+03 1.67929735e+03]
+ [1.00000000e+01 3.70000000e-01 1.56870232e+03 1.67929735e+03]]
+Table II:
+ [[5.00000000e+00 2.00000000e-02 1.58408754e+03 1.57564146e+03
+  1.14870932e+01 8.88747204e-01]
+ [6.00000000e+00 7.00000000e-02 1.57994098e+03 1.57314026e+03
+  1.14218774e+01 8.86601681e-01]
+ [7.00000000e+00 1.90000000e-01 1.57857979e+03 1.57167198e+03
+  1.13668380e+01 8.84786898e-01]
+ [8.00000000e+00 3.70000000e-01 1.57724482e+03 1.57073727e+03
+  1.13263833e+01 8.83450634e-01]
+ [9.00000000e+00 3.70000000e-01 1.57724482e+03 1.57073727e+03
+  1.13263833e+01 8.83450634e-01]
+ [1.00000000e+01 3.70000000e-01 1.57724482e+03 1.57073727e+03
+  1.13263833e+01 8.83450634e-01]]
+
+
+RUN:  RUN 2: Rebinned+PRad
+
+
+PROGRESS:
+
+performing cross validation without regularization...
+performing regularization parameter scan for each order N >= n...
+scanning for order:  6
+scanning for order:  7
+scanning for order:  8
+scanning for order:  9
+scanning for order:  10
+performing group validation with optimized regularization...
+DONE!
+
+
+
+Cross-validation without regularization:
+ [[   1 3690 2108]
+ [   2 1333  777]
+ [   3 1291 1001]
+ [   4 1223 1186]
+ [   5 1139 1313]
+ [   6 1103  736]
+ [   7 1102  840]
+ [   8 1080  997]
+ [   9 1080  997]
+ [  10 1080  997]]
+Value of N, n, at which chi^2_test was minimized:  6
+Optimized regularization parameters:
+ [ 6  7  8  9 10] [0.1, 0.26, 0.51, 0.51, 0.51]
+Cross-validation with optimized regularization:
+ [[6.00000000e+00 1.00000000e-01 1.13742994e+03 6.70716447e+02]
+ [7.00000000e+00 2.60000000e-01 1.13500868e+03 6.71976305e+02]
+ [8.00000000e+00 5.10000000e-01 1.13284365e+03 6.73661804e+02]
+ [9.00000000e+00 5.10000000e-01 1.13284365e+03 6.73661804e+02]
+ [1.00000000e+01 5.10000000e-01 1.13284365e+03 6.73661804e+02]]
+Table II:
+ [[6.00000000e+00 1.00000000e-01 6.28851460e+02 6.24284574e+02
+  1.00787406e+01 8.41197998e-01]
+ [7.00000000e+00 2.60000000e-01 6.27506558e+02 6.22967181e+02
+  1.00724270e+01 8.40978784e-01]
+ [8.00000000e+00 5.10000000e-01 6.26324527e+02 6.21786704e+02
+  1.00646984e+01 8.40710363e-01]
+ [9.00000000e+00 5.10000000e-01 6.26324527e+02 6.21786704e+02
+  1.00646984e+01 8.40710363e-01]
+ [1.00000000e+01 5.10000000e-01 6.26324527e+02 6.21786704e+02
+  1.00646984e+01 8.40710363e-01]]
+
+
+RUN:  RUN 3: Rebinned
+
+
+PROGRESS:
+
+performing cross validation without regularization...
+performing regularization parameter scan for each order N >= n...
+scanning for order:  5
+scanning for order:  6
+scanning for order:  7
+scanning for order:  8
+scanning for order:  9
+scanning for order:  10
+performing group validation with optimized regularization...
+DONE!
+
+
+
+Cross-validation without regularization:
+ [[   1 1933 2018]
+ [   2  641  687]
+ [   3  616  903]
+ [   4  580 1104]
+ [   5  509  573]
+ [   6  506  591]
+ [   7  504  672]
+ [   8  498  825]
+ [   9  498  825]
+ [  10  498  825]]
+Value of N, n, at which chi^2_test was minimized:  5
+Optimized regularization parameters:
+ [ 5  6  7  8  9 10] [0.01, 0.03, 0.08, 0.15, 0.15, 0.15]
+Cross-validation with optimized regularization:
+ [[5.00000000e+00 1.00000000e-02 5.09534897e+02 5.53243666e+02]
+ [6.00000000e+00 3.00000000e-02 5.08480902e+02 5.57395702e+02]
+ [7.00000000e+00 8.00000000e-02 5.07887492e+02 5.63447910e+02]
+ [8.00000000e+00 1.50000000e-01 5.07487398e+02 5.69103589e+02]
+ [9.00000000e+00 1.50000000e-01 5.07487398e+02 5.69103589e+02]
+ [1.00000000e+01 1.50000000e-01 5.07487398e+02 5.69103589e+02]]
+Table II:
+ [[5.00000000e+00 1.00000000e-02 5.13869726e+02 5.10371951e+02
+  1.08836620e+01 8.68692721e-01]
+ [6.00000000e+00 3.00000000e-02 5.11852496e+02 5.09468132e+02
+  1.08426088e+01 8.67311509e-01]
+ [7.00000000e+00 8.00000000e-02 5.11304333e+02 5.08948320e+02
+  1.08011413e+01 8.65914119e-01]
+ [8.00000000e+00 1.50000000e-01 5.10741444e+02 5.08615330e+02
+  1.07706384e+01 8.64884781e-01]
+ [9.00000000e+00 1.50000000e-01 5.10741444e+02 5.08615330e+02
+  1.07706384e+01 8.64884781e-01]
+ [1.00000000e+01 1.50000000e-01 5.10741444e+02 5.08615330e+02
+  1.07706384e+01 8.64884781e-01]]
+
+
+RUN:  RUN 4: OG+PRad
+
+
+PROGRESS:
+
+performing cross validation without regularization...

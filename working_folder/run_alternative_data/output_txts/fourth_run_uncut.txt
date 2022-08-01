@@ -1,0 +1,396 @@
+"C:\Users\Michael Chen\Downloads\radius-master\venv\Scripts\python.exe" C:/Desktop/pythonProjects/Comments-On-GrimolinRussel22/run_alternative_data/run_alt_data.py
+
+
+RUN:  RUN 1: OG DATA
+
+
+PROGRESS:
+
+globals at start (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+performing cross validation without regularization...
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+fit info (data, order, reg_param):  0.989332 1 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.989332 1 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.989332 2 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.989332 3 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.989332 4 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.989332 5 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.989332 6 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.989332 7 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.989332 8 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.989332 9 0
+performing regularization parameter scan for each order N >= n...
+scanning for order:  5
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.989332 5 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.989332 5 0.0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.989332 5 0.01
+scanning for order:  6
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.989332 6 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.989332 6 0.0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.989332 6 0.01
+scanning for order:  7
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.989332 7 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.989332 7 0.0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.989332 7 0.01
+scanning for order:  8
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.989332 8 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.989332 8 0.0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.989332 8 0.01
+scanning for order:  9
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.989332 9 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.989332 9 0.0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.989332 9 0.01
+performing group validation with optimized regularization...
+globals at end (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+DONE!
+
+
+
+Cross-validation without regularization:
+ [[   1 4933 5114]
+ [   2 1948 2029]
+ [   3 1876 2357]
+ [   4 1854 2255]
+ [   5 1573 1681]
+ [   6 1566 1702]
+ [   7 1556 1911]
+ [   8 1544 2059]
+ [   9 1544 2060]]
+Value of N, n, at which chi^2_test was minimized:  5
+Optimized regularization parameters:
+ [5 6 7 8 9] [0.02, 0.07, 0.19, 0.37, 0.37]
+Cross-validation with optimized regularization:
+ [[5.00000000e+00 2.00000000e-02 1.57406790e+03 1.65739089e+03]
+ [6.00000000e+00 7.00000000e-02 1.57132594e+03 1.66419920e+03]
+ [7.00000000e+00 1.90000000e-01 1.56974191e+03 1.67150764e+03]
+ [8.00000000e+00 3.70000000e-01 1.56870232e+03 1.67929735e+03]
+ [9.00000000e+00 3.70000000e-01 1.56870232e+03 1.67929735e+03]]
+Table II:
+ [[5.00000000e+00 2.00000000e-02 1.58408754e+03 1.57564146e+03
+  1.14870932e+01 8.88747204e-01]
+ [6.00000000e+00 7.00000000e-02 1.57994098e+03 1.57314026e+03
+  1.14218774e+01 8.86601681e-01]
+ [7.00000000e+00 1.90000000e-01 1.57857979e+03 1.57167198e+03
+  1.13668380e+01 8.84786898e-01]
+ [8.00000000e+00 3.70000000e-01 1.57724482e+03 1.57073727e+03
+  1.13263833e+01 8.83450634e-01]
+ [9.00000000e+00 3.70000000e-01 1.57724482e+03 1.57073727e+03
+  1.13263833e+01 8.83450634e-01]]
+
+
+RUN:  RUN 2: Rebinned+PRad
+
+
+PROGRESS:
+
+globals at start (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+performing cross validation without regularization...
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 1 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 2 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 3 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 4 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 5 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 6 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 7 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 8 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 9 0
+performing regularization parameter scan for each order N >= n...
+scanning for order:  6
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 6 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 6 0.0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 6 0.01
+scanning for order:  7
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 7 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 7 0.0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 7 0.01
+scanning for order:  8
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 8 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 8 0.0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 8 0.01
+scanning for order:  9
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 9 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 9 0.0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 9 0.01
+performing group validation with optimized regularization...
+globals at end (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+DONE!
+
+
+
+Cross-validation without regularization:
+ [[   1 2261 2108]
+ [   2  817  777]
+ [   3  790 1001]
+ [   4  749 1186]
+ [   5  697 1313]
+ [   6  675  736]
+ [   7  674  840]
+ [   8  661  997]
+ [   9  661  997]]
+Value of N, n, at which chi^2_test was minimized:  6
+Optimized regularization parameters:
+ [6 7 8 9] [0.1, 0.26, 0.51, 0.51]
+Cross-validation with optimized regularization:
+ [[6.00000000e+00 1.00000000e-01 6.96758824e+02 6.70716447e+02]
+ [7.00000000e+00 2.60000000e-01 6.95267853e+02 6.71976305e+02]
+ [8.00000000e+00 5.10000000e-01 6.93935436e+02 6.73661804e+02]
+ [9.00000000e+00 5.10000000e-01 6.93935436e+02 6.73661804e+02]]
+Table II:
+ [[6.00000000e+00 1.00000000e-01 6.28851460e+02 6.24284574e+02
+  1.00787406e+01 8.41197998e-01]
+ [7.00000000e+00 2.60000000e-01 6.27506558e+02 6.22967181e+02
+  1.00724270e+01 8.40978784e-01]
+ [8.00000000e+00 5.10000000e-01 6.26324527e+02 6.21786704e+02
+  1.00646984e+01 8.40710363e-01]
+ [9.00000000e+00 5.10000000e-01 6.26324527e+02 6.21786704e+02
+  1.00646984e+01 8.40710363e-01]]
+
+
+RUN:  RUN 3: Rebinned
+
+
+PROGRESS:
+
+globals at start (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+performing cross validation without regularization...
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.9968659 1 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.9968659 2 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.9968659 3 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.9968659 4 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.9968659 5 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.9968659 6 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.9968659 7 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.9968659 8 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.9968659 9 0
+performing regularization parameter scan for each order N >= n...
+scanning for order:  5
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.9968659 5 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.9968659 5 0.0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.9968659 5 0.01
+scanning for order:  6
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.9968659 6 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.9968659 6 0.0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.9968659 6 0.01
+scanning for order:  7
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.9968659 7 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.9968659 7 0.0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.9968659 7 0.01
+scanning for order:  8
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.9968659 8 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.9968659 8 0.0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.9968659 8 0.01
+scanning for order:  9
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.9968659 9 0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.9968659 9 0.0
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.9968659 9 0.01
+performing group validation with optimized regularization...
+globals (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+group validation info (data, order, reg_param):  0.9968659 5 0.01
+globals at end (n, b, s):  31 [450.0, 585.0, 720.0, 180.0, 855.0, 315.0] ['A', 'B', 'C']
+DONE!
+
+
+
+Cross-validation without regularization:
+ [[   1 1933 2018]
+ [   2  641  687]
+ [   3  616  903]
+ [   4  580 1104]
+ [   5  509  573]
+ [   6  506  591]
+ [   7  504  672]
+ [   8  498  825]
+ [   9  498  825]]
+Value of N, n, at which chi^2_test was minimized:  5
+Optimized regularization parameters:
+ [5 6 7 8 9] [0.01, 0.03, 0.08, 0.15, 0.15]
+Cross-validation with optimized regularization:
+ [[5.00000000e+00 1.00000000e-02 5.09534897e+02 5.53243666e+02]
+ [6.00000000e+00 3.00000000e-02 5.08480902e+02 5.57395702e+02]
+ [7.00000000e+00 8.00000000e-02 5.07887492e+02 5.63447910e+02]
+ [8.00000000e+00 1.50000000e-01 5.07487398e+02 5.69103589e+02]
+ [9.00000000e+00 1.50000000e-01 5.07487398e+02 5.69103589e+02]]
+Table II:
+ [[5.00000000e+00 1.00000000e-02 5.13869726e+02 5.10371951e+02
+  1.08836620e+01 8.68692721e-01]
+ [6.00000000e+00 3.00000000e-02 5.11852496e+02 5.09468132e+02
+  1.08426088e+01 8.67311509e-01]
+ [7.00000000e+00 8.00000000e-02 5.11304333e+02 5.08948320e+02
+  1.08011413e+01 8.65914119e-01]
+ [8.00000000e+00 1.50000000e-01 5.10741444e+02 5.08615330e+02
+  1.07706384e+01 8.64884781e-01]
+ [9.00000000e+00 1.50000000e-01 5.10741444e+02 5.08615330e+02
+  1.07706384e+01 8.64884781e-01]]
+
+
+RUN:  RUN 4: OG+PRad
+
+
+PROGRESS:
+
+globals at start (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+performing cross validation without regularization...
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 1 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 2 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 3 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 4 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 5 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 6 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 7 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 8 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 9 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 10 0
+performing regularization parameter scan for each order N >= n...
+scanning for order:  6
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 6 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 6 0.0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 6 0.01
+scanning for order:  7
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 7 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 7 0.0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 7 0.01
+scanning for order:  8
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 8 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 8 0.0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 8 0.01
+scanning for order:  9
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 9 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 9 0.0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 9 0.01
+scanning for order:  10
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 10 0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 10 0.0
+globals (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+group validation info (data, order, reg_param):  0.99723 10 0.01
+performing group validation with optimized regularization...
+globals at end (n, b, s):  33 [450.0, 585.0, 1101.0, 720.0, 180.0, 855.0, 315.0, 2143.0] ['P', 'A', 'B', 'C']
+DONE!
+
+
+
+Cross-validation without regularization:
+ [[   1 5617 5206]
+ [   2 2284 2124]
+ [   3 2227 2493]
+ [   4 2201 2398]
+ [   5 1969 2698]
+ [   6 1900 1907]
+ [   7 1897 2165]
+ [   8 1859 2531]
+ [   9 1859 2520]
+ [  10 1859 2520]]
+Value of N, n, at which chi^2_test was minimized:  6
+Optimized regularization parameters:
+ [ 6  7  8  9 10] [0.24, 0.63, 1.25, 1.25, 1.25]
+Cross-validation with optimized regularization:
+ [[6.00000000e+00 2.40000000e-01 1.96598418e+03 1.85260552e+03]
+ [7.00000000e+00 6.30000000e-01 1.96129412e+03 1.85196474e+03]
+ [8.00000000e+00 1.25000000e+00 1.95727627e+03 1.85220503e+03]
+ [9.00000000e+00 1.25000000e+00 1.95727627e+03 1.85220503e+03]
+ [1.00000000e+01 1.25000000e+00 1.95727627e+03 1.85220503e+03]]
+Table II:
+ [[6.00000000e+00 2.40000000e-01 1.77514026e+03 1.76071918e+03
+  1.06511452e+01 8.60840551e-01]
+ [7.00000000e+00 6.30000000e-01 1.77095544e+03 1.75655380e+03
+  1.06381640e+01 8.60400060e-01]
+ [8.00000000e+00 1.25000000e+00 1.76734627e+03 1.75296150e+03
+  1.06248953e+01 8.59949580e-01]
+ [9.00000000e+00 1.25000000e+00 1.76734627e+03 1.75296150e+03
+  1.06248953e+01 8.59949580e-01]
+ [1.00000000e+01 1.25000000e+00 1.76734627e+03 1.75296150e+03
+  1.06248953e+01 8.59949580e-01]]
+
+Process finished with exit code 0
