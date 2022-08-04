@@ -7,7 +7,7 @@ This contains the code and files that are intended for the supplementary materia
 This directory contains most of the work I did. 
 
 You should be able to ignore the following folders:
-> ```main_working_folder```, contains my draft work
+> ```main_working_folder```, contains my draft work 
 > ```fun_homework```, contains the first homework code
 
 And you won't need these folders, although they do have some useful reference material:
