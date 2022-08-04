@@ -16,7 +16,7 @@ And you won't need these folders, although they do have some useful reference ma
 
 The ```run_alternative_data``` folder contains the important stuff.
 
-For the files directly in the directory:
+For the files directly in the directory root:
 
 First, ```alt_data_methods.py``` and ```run_alt_data.py``` are essentially just the supplementary material code, so you shouldn't need to do anything with these, I would just go to the supplementary material if you want to look at these (I made a few polishing updates like comments and combined the two into one file).
 
@@ -25,5 +25,10 @@ The rest of the files are the meat:
 > ```modified_fit.py``` and ```modified_plot.py``` are modified versions of Gramolin's code which are used in  the other scripts. ```models.py``` is Gramolin's code which is also used in other scripts.
 > ```asym_chi2.py``` runs the chi^2 tests for the models against the asymmetry data.
 
+For the folders in the directory, you can ignore most of them, here are what they contain:
+> ```assorted_testing``` contains random side things like running just PRad data or picking the model by the asym chi^2
+> ```asymdata``` and ```data``` have the data files
+> ```figures``` and ```output_texts``` contain those things
+> ```misc``` is just old or random things
 
 
