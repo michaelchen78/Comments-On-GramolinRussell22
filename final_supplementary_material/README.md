@@ -1,4 +1,4 @@
-*still in progress*
+*README still in progress*
 
 [![arXiv](https://img.shields.io/badge/arXiv-2102.13022-b31b1b.svg)](https://arxiv.org/abs/2102.13022)
 [![DOI:10.1103/PhysRevD.105.054004](https://img.shields.io/badge/DOI-10.1103/PhysRevD.105.054004-0000ff.svg)](https://doi.org/10.1103/PhysRevD.105.054004)
