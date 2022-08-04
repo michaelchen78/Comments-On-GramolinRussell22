@@ -2,15 +2,13 @@
 
 import matplotlib
 import matplotlib.pyplot as plt
-import matplotlib as mpl
-
-mpl.rcParams.update(mpl.rcParamsDefault)
 import numpy as np
 import pandas as pd
 
-import fit
-import models
+import modified_fit
 from models import calc_cs, calc_ffs, calc_ge_gm, calc_rho, dipole_ffs, get_b2, hbarc
+
+from scipy.stats import shapiro  # [MOD: FOR NORMALITY CHECK]
 
 matplotlib.rcParams["text.usetex"] = True
 matplotlib.rcParams["font.size"] = 13
@@ -30,7 +28,7 @@ def read_Rosenbluth_data():
     return data
 
 
-def calc_interval(calc_func, x_range, param_list, order):
+def calc_interval(calc_func, x_range, param_list, order, Q2_range=np.linspace(0, 1.4, 200)):
     """Calculate 68% ("1 sigma") percentile interval from param sample."""
     out = np.array([calc_func(x_range, param, order) for param in param_list])
     return np.percentile(out, (15.9, 84.1), 0)
@@ -39,8 +37,8 @@ def calc_interval(calc_func, x_range, param_list, order):
 def calc_params(data, order, reg_param):
     """Run fit and get model parameters and covariance."""
     params, _, _, _, cov = fit.fit(data, data, order, reg_param)
-    params = params[fit.N_NORM_PARAMS:]
-    cov = cov[fit.N_NORM_PARAMS:, fit.N_NORM_PARAMS:]
+    params = params[fit.N_NORM_PARAMS :]
+    cov = cov[fit.N_NORM_PARAMS :, fit.N_NORM_PARAMS :]
     return params, cov
 
 
@@ -138,7 +136,7 @@ def plot_rhos(data, order, reg_param):
     params, cov = calc_params(data, order, reg_param)
     rho1, rho2 = calc_rho(rho_range, params, order)
 
-    if fit.covariance_bad(cov):
+    if modified_fit.covariance_bad(cov):
         print("Warning: Covariance ill-conditioned, will not plot confidence intervals")
         draw_confidence = False
     else:
@@ -176,82 +174,12 @@ def plot_rhos(data, order, reg_param):
         plt.text(1.1, 0.079, r"$\rho_2$", color="#0000FF")
 
 
-def plot_ge_gm(cs_data, R_data, order, reg_param):
+def plot_ge_gm(cs_data, order, reg_param, R_data=read_Rosenbluth_data(), Q2_max=1, precision=100):  # [MOD: made rosenbluth data hard coded]
     """Plot the Sachs electric and magnetic form factors."""
     params, cov = calc_params(cs_data, order, reg_param)
-    Q2_range = np.linspace(0, 0.01, 1001)
+    #Q2_range = np.linspace(0, Q2_max, 100)  # [MOD HERE]
+    Q2_range = np.linspace(0, Q2_max, int(Q2_max*precision + 1))  # [MOD HERE]
     GE, GM = calc_ge_gm(Q2_range, params, order)
-    plt.plot(Q2_range, GM, label="GM/(mu*Gdip)")
-
-    GE_dip, GM_dip = dipole_ffs(Q2_range)
-    GE = GE * GE_dip
-    GM = (GM * GM_dip) / (1 + models.kappa)
-    print(Q2_range)
-    print(GE)
-    print(GM)
-    plt.plot(Q2_range, GM, label="GM/mu")
-    plt.legend()
-
-    """Plot Alarcon and Weiss"""
-    from scipy.interpolate import interp1d
-    # Read data file into array
-    # Transpose array to allow for standard indexing
-    paramT = np.loadtxt('DIXEFT-Parameterization.dat')
-    param = paramT.transpose()
-    # Compute interpolating spline
-    AEp = interp1d(param[0], param[1], kind='cubic')
-    AEn = interp1d(param[0], param[2], kind='cubic')
-    BE = interp1d(param[0], param[3], kind='cubic')
-    BbarE = interp1d(param[0], param[4], kind='cubic')
-    AMp = interp1d(param[0], param[5], kind='cubic')
-    BMp = interp1d(param[0], param[6], kind='cubic')
-    BbarMp = interp1d(param[0], param[7], kind='cubic')
-    AMn = interp1d(param[0], param[8], kind='cubic')
-    BbarMn = interp1d(param[0], param[9], kind='cubic')
-    BMn = interp1d(param[0], param[10], kind='cubic')
-
-    # Proton Electric Form Factor
-    def GEp(Q2, r2Ep, r2En):
-        return AEp(Q2) + r2Ep * BE(Q2) + r2En * BbarE(Q2)
-
-    # Neutron Magnetic Form Factors
-    def GEn(Q2, r2En, r2Ep):
-        return AEn(Q2) + r2En * BE(Q2) + r2Ep * BbarE(Q2)
-
-    # Proton Magnetic Form Factors
-    def GMp(Q2, r2Mp, r2Mn):
-        return AMp(Q2) + r2Mp * BMp(Q2) + r2Mn * BbarMp(Q2)
-
-    # Neutron Magnetic Form Factors
-    def GMn(Q2, r2Mn, r2Mp):
-        return AMn(Q2) + r2Mn * BMn(Q2) + r2Mp * BbarMn(Q2)
-
-    # Standard dipole form factor
-    def dip(Q2):
-        return (1 + Q2 / 0.71) ** (-2)
-
-    # Set default values of squared radii
-    # All values in fm^2 units
-    r2Ep = 0.842 ** 2
-    r2Mp = 0.850 ** 2
-    r2En = -0.116
-    r2Mn = 0.864 ** 2
-
-    Q2list = np.linspace(0, 1.0, 201)
-    mup = 1 + models.kappa
-    alarcon_ge = GEp(Q2list, 0.843 ** 2, r2En)
-    alarcon_gm = GMp(Q2list, 0.85 ** 2, r2Mn) / mup
-    # axes.fill_between(Q2list, GEp(Q2list, 0.844 ** 2, r2En) / dip(Q2list), GEp(Q2list, 0.840 ** 2, r2En) / dip(Q2list),
-    #              label='alarcon ge', color='red', lw=2, zorder=11, alpha=0.75)
-    # axes.fill_between(Q2list, GMp(Q2list, 0.849 ** 2, r2Mn) / mup / dip(Q2list),
-    #                  GMp(Q2list, 0.851 ** 2, r2Mn) / mup / dip(Q2list),
-    #                  label='alarcon gm', color='green', lw=2, alpha=0.75, zorder=111)
-
-    # Plot proton electric form factor
-    # axes.plot(Q2list, alarcon_ge, '--', label='alarcon ge', color='red', lw=1)
-    # axes.plot(Q2list, alarcon_gm, '--', label='alarcon gm', color='green', lw=1)
-
-    # axes.plot(Q2list, alarcon_ge/alarcon_gm, '--', label='alarcon ratio', color='black', lw=1)
 
     if fit.covariance_bad(cov):
         print("Warning: Covariance ill-conditioned, will not plot confidence intervals")
@@ -261,13 +189,45 @@ def plot_ge_gm(cs_data, R_data, order, reg_param):
 
     # Calculate statistical uncertainties:
     if draw_confidence:
+        '''
+        # [MOD: ENSURING NORMALITY]
+        normal = False
+        counter = 0
+        min_normality_factor = 0.8  # the required percentage of normal Q^2
+        while not normal:
+            test_params = np.random.multivariate_normal(params, cov, size=N_SAMPLES)
+            out = np.array([calc_ge_gm(Q2_range, param, order) for param in test_params])
+            n_normal = 0
+            n_not_normal = 0
+            p_not_normal_samples = []
+            for q2 in range(len(Q2_range)):
+                ge_s_at_q2 = np.empty((1, 1000))
+                for idx, sample in enumerate(out):
+                    ge_s = sample[0]
+                    ge_s_at_q2[0][idx] = ge_s[q2]
+                stat, p = shapiro(ge_s_at_q2)
+                # print('stat=%.3f, p=%.3f\n' % (stat, p))
+                if p > 0.05:
+                    n_normal += 1
+                else:
+                    n_not_normal += 1
+                    p_not_normal_samples.append(p)
+            if n_normal >= min_normality_factor*len(Q2_range):
+                normal = True
+            counter += 1
+        # print("number of normal samples out of 200: ", n_normal, "\np's of not-normal samples: ",
+        #      p_not_normal_samples, "\niterations: ", counter)
+        print("Iterations to reach normal samples: ", counter)
+        print("Number of normal samples: ", n_normal)
+        params = test_params
+        '''
         params = np.random.multivariate_normal(params, cov, size=N_SAMPLES)
         interval = calc_interval(calc_ge_gm, Q2_range, params, order)
         # Calculate systematic uncertainties:
         f1_up, f1_low, f2_up, f2_low = calc_sys_bands(calc_ge_gm, Q2_range, cs_data, order, reg_param)
 
-
-
+    '''
+    # [MOD: CLEAN]
     fig = plt.figure(figsize=(10, 3.5))
     plt.subplots_adjust(wspace=0.35)
 
@@ -286,9 +246,6 @@ def plot_ge_gm(cs_data, R_data, order, reg_param):
         fill_between(Q2_range, interval[1, 0], interval[0, 0], "#FFAAAA")
     # Plot the best-fit line for G_E:
     plt.plot(Q2_range, GE, color="black", lw=1, alpha=0.7)
-    plt.plot(Q2list, GEp(Q2list, 0.842 ** 2, r2En) / dip(Q2list), label='alarcon ge', color='green', lw=1)
-    print(interval[1, 0] - GE)
-    print(GE - interval[0,0])
 
     # Axes and labels:
     plt.xlim(0, 1)
@@ -309,11 +266,9 @@ def plot_ge_gm(cs_data, R_data, order, reg_param):
         fill_between(Q2_range, interval[0, 1], interval[0, 1] - f2_low, "red")
         # Plot the statistical band for G_M:
         fill_between(Q2_range, interval[1, 1], interval[0, 1], "#FFAAAA")
+        print(interval[1, 1] - GM, "\n", GM - interval[0, 1])
     # Plot the best-fit line for G_M:
     plt.plot(Q2_range, GM, color="black", lw=1, alpha=0.7)
-    plt.plot(Q2list, GMp(Q2list, 0.850 ** 2, r2Mn) / mup / dip(Q2list), label='alarcon gm', color='green', lw=1)
-    print(interval[1,1] - GM)
-    print(GM - interval[0, 1])
 
     # Axes and labels:
     plt.xlim(0, 1)
@@ -321,7 +276,9 @@ def plot_ge_gm(cs_data, R_data, order, reg_param):
         plt.ylim(0.98, 1.09)
     plt.xlabel(r"$Q^2~\left(\mathrm{GeV}^2\right)$")
     plt.ylabel(r"$G_{M} / (\mu \, G_{\mathrm{dip}})$")
+    '''
 
+    return GE, GM, Q2_range, interval, f1_up, f1_low, f2_up, f2_low  # [MOD: to make plot_alt_data.py run]
 
 
 
@@ -343,7 +300,7 @@ def plot_cs(data, order, reg_param):
 
         Q2max = np.amax(data["Q2"][data["E"] == energy])
         Q2val = np.linspace(0, Q2max, 100)
-        curve = calc_cs(0.001 * energy, Q2val, params[fit.N_NORM_PARAMS:], order)
+        curve = calc_cs(0.001 * energy, Q2val, params[fit.N_NORM_PARAMS :], order)
 
         # Spectrometer A:
         Q2 = data["Q2"][(data["E"] == energy) & (data["spec"] == "A")]
@@ -380,41 +337,37 @@ def main(order, reg_param):
     print("Model: N = {}, lambda = {}".format(order, reg_param))
 
     # Read the cross section and Rosenbluth data:
-    cs_data = fit.read_cs_data("data/Rebinned+PRadCrossSectionsData.dat")[0]
+    cs_data = fit.read_cs_data("data/CrossSections.dat")[0]  # [MOD: MAKE COMPATIBLE WITH fit.read_cs_data()]
     Rosenbluth_data = read_Rosenbluth_data()
 
     # Figure 1:
-   # print("Plotting F1, F2, and transverse charge densities...")
-   # fig_1 = plt.figure(figsize=(10, 3.5))
-   # plt.subplots_adjust(wspace=0.35)
+    print("Plotting F1, F2, and transverse charge densities...")
+    fig_1 = plt.figure(figsize=(10, 3.5))
+    plt.subplots_adjust(wspace=0.35)
 
     # Figure 1, left panel (Dirac and Pauli form factors):
-    #ax1 = fig_1.add_subplot(1, 2, 1)
-    #plot_f1_f2(cs_data, order, reg_param)
-    #plt.text(0.9, 0.91, "(a)", transform=ax1.transAxes, fontsize=14)
+    ax1 = fig_1.add_subplot(1, 2, 1)
+    plot_f1_f2(cs_data, order, reg_param)
+    plt.text(0.9, 0.91, "(a)", transform=ax1.transAxes, fontsize=14)
 
     # Figure 1, right panel (transverse charge densities):
-    #ax2 = fig_1.add_subplot(1, 2, 2)
-    #plot_rhos(cs_data, order, reg_param)
-    #plt.text(0.9, 0.91, "(b)", transform=ax2.transAxes, fontsize=14)
+    ax2 = fig_1.add_subplot(1, 2, 2)
+    plot_rhos(cs_data, order, reg_param)
+    plt.text(0.9, 0.91, "(b)", transform=ax2.transAxes, fontsize=14)
 
-    #save_fig("figures/fig_1.pdf")
+    # save_fig("figures/fig_1.pdf")
 
     # Figure S1 (electric and magnetic form factors):
-    #print("Plotting GE and GM...")
-    plot_ge_gm(cs_data, Rosenbluth_data, order, reg_param)
-    #save_fig("figures/fig_S1.pdf")
+    print("Plotting GE and GM...")
+    plot_ge_gm(cs_data, order, reg_param)  # [MOD: edited accordingly]
+    # save_fig("figures/fig_S1.pdf")
 
     # Figure S2 (fitted cross sections):
-    #print("Plotting fitted cross sections...")
-    #plot_cs(cs_data, order, reg_param)
-    #save_fig("figures/fig_S2.pdf")
-
-
-
-    plt.show()
+    print("Plotting fitted cross sections...")
+    plot_cs(cs_data, order, reg_param)
+    # save_fig("figures/fig_S2.pdf")
 
 
 if __name__ == "__main__":
     ARGS = fit.parse_args()
-    main(6, 0.1)
+    main(ARGS.order, ARGS.reg_param)

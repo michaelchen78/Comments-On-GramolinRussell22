@@ -11,11 +11,11 @@ import scipy.stats as st
 from scipy.stats import norm
 
 
-import fit
+import modified_fit
 import models
 from models import calc_cs, calc_ffs, calc_ge_gm, calc_rho, dipole_ffs, get_b2, hbarc
-from plot import fill_between, plot_ge_gm, calc_interval
-import plot
+from modified_plot import fill_between, plot_ge_gm, calc_interval
+import modified_plot
 
 from sympy.stats import ContinuousRV, P, E
 from sympy import exp, Symbol, Interval, oo
@@ -335,7 +335,7 @@ def plot_data_set(cs_data, order, reg_param, Q2_max, axes):
     from scipy.interpolate import interp1d
     # Read data file into array
     # Transpose array to allow for standard indexing
-    paramT = np.loadtxt('DIXEFT-Parameterization.dat')
+    paramT = np.loadtxt('../data/DIXEFT-Parameterization.dat')
     param = paramT.transpose()
     # Compute interpolating spline
     AEp = interp1d(param[0], param[1], kind='cubic')
@@ -448,19 +448,15 @@ def plot_data_set(cs_data, order, reg_param, Q2_max, axes):
     #print(alarcon_ge)
     #print(alarcon_gm)
     axes.plot(Q2list, alarcon_ge/alarcon_gm, '--', label='alarcon ratio', color='black', lw=1)
-    print(stat_up)
-    print(gm_ratio_up)
-    print(simple_up)
 
 
-    fancy_up, fancy_down = calc_stat_error_ratio_distribution(interval, Q2list)
-    print(fancy_up)
-    trim_Q2 = True
-    if trim_Q2:
-        Q2list = Q2list[1:]
-    axes.fill_between(Q2list, fancy_up, fancy_down, color='purple', lw=0, alpha=0.4)
-    axes.plot(Q2list, fancy_up, label='up', color='purple', lw=1)
-    axes.plot(Q2list, fancy_down, label='down', color='purple', lw=1)
+    #fancy_up, fancy_down = calc_stat_error_ratio_distribution(interval, Q2list)
+    #trim_Q2 = True
+    #if trim_Q2:
+    #    Q2list = Q2list[1:]
+    #axes.fill_between(Q2list, fancy_up, fancy_down, color='purple', lw=0, alpha=0.4)
+    #axes.plot(Q2list, fancy_up, label='up', color='purple', lw=1)
+    #axes.plot(Q2list, fancy_down, label='down', color='purple', lw=1)
 
 def plot_subplot(data_file_name, order, reg_param, title, label, axes_coordinates, Q2_max, y_min,
                  y_max, legend=False, x_off=False, y_off=False, rectangle_settings=True, on=True):
@@ -472,7 +468,7 @@ def plot_subplot(data_file_name, order, reg_param, title, label, axes_coordinate
         model_param_pos = 0.813, 1.028
 
     # parameters
-    cs_data = fit.read_cs_data(data_file_name)[0]
+    cs_data = modified_fit.read_cs_data(data_file_name)[0]
 
     # Axes and limits
     ax = axes_coordinates
@@ -534,7 +530,7 @@ def main():  # other legend options?
     '''OG data'''
     order = 5
     reg_param = 0.02
-    data_file_name = "data/CrossSections.dat"
+    data_file_name = "../data/CrossSections.dat"
     title = r'Bernauer \emph{et al.}'
     label = r'a)'
     axes_coordinates = axes[0, 0]
@@ -544,7 +540,7 @@ def main():  # other legend options?
     '''Rebinned Data'''
     order = 5
     reg_param = 0.01
-    data_file_name = "data/RebinnedCrossSectionsData.dat"
+    data_file_name = "../data/RebinnedCrossSectionsData.dat"
     title = r'Lee \emph{et al.}'
     label = r'b)'
     axes_coordinates = axes[0,1]
@@ -554,7 +550,7 @@ def main():  # other legend options?
     '''OG+PRad Data'''
     order = 7
     reg_param = 0.63
-    data_file_name = "data/OG+PRadCrossSectionsData.dat"
+    data_file_name = "../data/OG+PRadCrossSectionsData.dat"
     title = r'Bernauer \emph{et al.} + Xiong \emph{et al.}'
     label = r'c)'
     axes_coordinates = axes[1, 0]
@@ -564,7 +560,7 @@ def main():  # other legend options?
     '''Rebinned+PRad Data'''
     order = 6
     reg_param = 0.1
-    data_file_name = "data/Rebinned+PRadCrossSectionsData.dat"
+    data_file_name = "../data/Rebinned+PRadCrossSectionsData.dat"
     title = r'Lee \emph{et al.} + Xiong \emph{et al.}'
     label = r'd)'
     axes_coordinates = axes[1,1]

@@ -15,11 +15,11 @@ from matplotlib.lines import Line2D
 from scipy.stats import norm
 
 
-import fit
+import modified_fit
 import models
 from models import calc_cs, calc_ffs, calc_ge_gm, calc_rho, dipole_ffs, get_b2, hbarc
-from plot import fill_between, plot_ge_gm, calc_interval
-import plot
+from modified_plot import fill_between, plot_ge_gm, calc_interval
+import modified_plot
 
 from sympy.stats import ContinuousRV, P, E
 from sympy import exp, Symbol, Interval, oo
@@ -291,10 +291,10 @@ def calc_ge_over_gm(Q2_range, params, order):
     return GE / GM
 
 
-# Modified version of calc_sys_bands(calc_func, x_range, data, order, reg_param) from the original plot.py
+# Modified version of calc_sys_bands(calc_func, x_range, data, order, reg_param) from the original modified_plot.py
 def calc_sys_error_original(x_range, data, order, reg_param):
     """Calculate systematic error bands for given quantity."""
-    params, _ = plot.calc_params(data, order, reg_param)
+    params, _ = modified_plot.calc_params(data, order, reg_param)
     ff_ratio = calc_ge_over_gm(x_range, params, order)
     mincut_params = fit.fit_systematic_variant("cs_mincut", data, order, reg_param)[0]
     maxcut_params = fit.fit_systematic_variant("cs_maxcut", data, order, reg_param)[0]
@@ -379,7 +379,7 @@ def plot_data_set(cs_data, order, reg_param, Q2_max, axes):
     from scipy.interpolate import interp1d
     # Read data file into array
     # Transpose array to allow for standard indexing
-    paramT = np.loadtxt('DIXEFT-Parameterization.dat')
+    paramT = np.loadtxt('data/DIXEFT-Parameterization.dat')
     param = paramT.transpose()
     # Compute interpolating spline
     AEp = interp1d(param[0], param[1], kind='cubic')

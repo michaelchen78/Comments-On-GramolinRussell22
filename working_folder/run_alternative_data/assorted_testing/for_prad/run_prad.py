@@ -35,5 +35,5 @@ def run_set_find_order_param_print_for_prad(max_N, lambdas, data_filepath, run_n
 '''run 5: PRad'''
 max_N = 4
 lambdas = [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.11,0.12,0.13,0.14,0.15,0.2, 0.3, 0.4, 0.5, 0.6,0.7,0.8,0.9]
-data_filepath = "../data/PRadAlone.dat"
+data_filepath = "../../data/PRadAlone.dat"
 run_set_find_order_param_print_for_prad(max_N, lambdas, data_filepath, "RUN 5: PRad Alone")

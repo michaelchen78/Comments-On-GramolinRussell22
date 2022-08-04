@@ -6,7 +6,7 @@ import sys
 
 # Returns chi^2_train and chi^2_test from group validation with the best normalizations,
 def perform_group_val_with_best_normalizations(order, reg_param, n_norm_params, data):
-    # Mirrors behavior in original fit.py lines 173-180
+    # Mirrors behavior in original modified_fit.py lines 173-180
     best_params, _, _, _, _ = modified_fit.fit(data, data, order, reg_param)
     normalizations = best_params[:n_norm_params]
     return modified_fit.group_validation(data, order, normalizations, reg_param)
@@ -75,7 +75,7 @@ def replicate_table_ii(orders_included, optimal_reg_params, data, n_norm_params)
                       dtype=float)  # array will have x rows of length 6: [N,lambda, L, chi^2, b^2_1, r_E]
     for counter, order in enumerate(orders_included):
         best_reg_param = optimal_reg_params[counter]
-        # Mirrors behavior in original fit.py lines 173-192
+        # Mirrors behavior in original modified_fit.py lines 173-192
         # Fit the full dataset:
         best_params, chi2, _, L, cov = modified_fit.fit(data, data, order, best_reg_param)
         fit_params = best_params[n_norm_params:]

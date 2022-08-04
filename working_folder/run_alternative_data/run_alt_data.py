@@ -9,7 +9,7 @@
 import numpy as np
 
 import alt_data_methods
-from working_folder.run_alternative_data import fit
+from working_folder.run_alternative_data import modified_fit
 
 
 def run_set_find_order_param_print(max_N, lambdas, data_filepath, run_name):
@@ -43,25 +43,25 @@ def main():
     max_N = 9  # change for small Prad. N must always start at 1, and go to max_N
     lambdas = np.linspace(0, 1.5, 151)
     data_filepath = "data/CrossSections.dat"
-    run_set_find_order_param_print(max_N, lambdas, data_filepath, "RUN 1: OG DATA")
+    run_set_find_order_param_print(max_N, lambdas, data_filepath, "RUN 1 (1): OG DATA")
 
     '''run 2: rebinned+PRad'''
     max_N = 9
     lambdas = np.linspace(0, 1.5, 151)
     data_filepath = "data/Rebinned+PRadCrossSectionsData.dat"
-    run_set_find_order_param_print(max_N, lambdas, data_filepath, "RUN 2: Rebinned+PRad")
+    run_set_find_order_param_print(max_N, lambdas, data_filepath, "RUN 2 (1): Rebinned+PRad")
 
     '''run 3: rebinned'''
     max_N = 9
     lambdas = np.linspace(0, 1.5, 151)
     data_filepath = "data/RebinnedCrossSectionsData.dat"
-    run_set_find_order_param_print(max_N, lambdas, data_filepath, "RUN 3: Rebinned")
+    run_set_find_order_param_print(max_N, lambdas, data_filepath, "RUN 3 (1): Rebinned")
 
     '''run 4: OG + PRad'''
     max_N = 10
     lambdas = np.linspace(0, 1.5, 151)
     data_filepath = "data/OG+PRadCrossSectionsData.dat"
-    run_set_find_order_param_print(max_N, lambdas, data_filepath, "RUN 4: OG+PRad")
+    run_set_find_order_param_print(max_N, lambdas, data_filepath, "RUN 4 (1): OG+PRad")
 
 
 if __name__ == "__main__":

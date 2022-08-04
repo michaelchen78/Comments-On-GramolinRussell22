@@ -1,6 +1,6 @@
-from working_folder.run_alternative_data import fit
+from working_folder.run_alternative_data import modified_fit
 import numpy as np
-import asym_chi2
+from working_folder.run_alternative_data import asym_chi2
 
 
 def find_fit_order_and_tikhonov_params(data_file_name, max_order, lambdas):
@@ -43,7 +43,7 @@ def find_fit_order_and_tikhonov_params(data_file_name, max_order, lambdas):
         cross_val_best_reg[counter][1] = best_reg_param
         cross_val_best_reg[counter][2] = asym_chi2.calc_chi2(data_file_name, order, best_reg_param)
 
-    print("globals at end (n, b, s): ", fit.N_NORM_PARAMS, fit.BEAM_ENERGIES, fit.SPECTROMETERS)
+    print("globals at end (n, b, s): ", modified_fit.N_NORM_PARAMS, fit.BEAM_ENERGIES, modified_fit.SPECTROMETERS)
 
     print("DONE!\n\n\n")
     return cross_val_no_reg, optimal_reg_params, cross_val_best_reg
@@ -59,13 +59,13 @@ def get_table_ii(data_file_name, max_order, optimal_reg_params, n_norm_params):
         best_reg_param = optimal_reg_params[counter]
 
         # Fit the full dataset:
-        best_params, chi2, _, L, cov = fit.fit(data, data, order, best_reg_param)
+        best_params, chi2, _, L, cov = modified_fit.fit(data, data, order, best_reg_param)
         fit_params = best_params[n_norm_params:]
         fit_cov = cov[n_norm_params:, n_norm_params:]
 
         # Extract the radii:
-        b2, b2_sigma = fit.get_b2(fit_params, fit_cov)
-        radius, radius_stat = fit.get_radius(b2, b2_sigma)
+        b2, b2_sigma = modified_fit.get_b2(fit_params, fit_cov)
+        radius, radius_stat = modified_fit.get_radius(b2, b2_sigma)
 
         table2[counter] = round(order, 1), best_reg_param, L, chi2, b2, radius
     return table2

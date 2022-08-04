@@ -39,25 +39,25 @@ def run_set_find_order_param_print(max_N, lambdas, data_filepath, run_name):
 max_N = 8  # change for small Prad. N must always start at 1, and go to max_N
 lambdas = [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
 data_filepath = "data/CrossSections.dat"
-run_set_find_order_param_print(max_N, lambdas, data_filepath, "RUN 1: OG DATA")
+run_set_find_order_param_print(max_N, lambdas, data_filepath, "RUN 1 (1): OG DATA")
 
 '''run 2: rebinned+PRad'''
 max_N = 10
 lambdas = [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.11,0.12,0.13,0.14,0.15,0.2, 0.3, 0.4, 0.5, 0.6,0.7,0.8,0.9]
 data_filepath = "data/Rebinned+PRadCrossSectionsData.dat"
-run_set_find_order_param_print(max_N, lambdas, data_filepath, "RUN 2: Rebinned+PRad")
+run_set_find_order_param_print(max_N, lambdas, data_filepath, "RUN 2 (1): Rebinned+PRad")
 
 '''run 3: rebinned'''
 max_N = 10
 lambdas = [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.11,0.12,0.13,0.14,0.15,0.2, 0.3, 0.4, 0.5, 0.6,0.7,0.8,0.9]
 data_filepath = "data/RebinnedCrossSectionsData.dat"
-run_set_find_order_param_print(max_N, lambdas, data_filepath, "RUN 3: Rebinned")
+run_set_find_order_param_print(max_N, lambdas, data_filepath, "RUN 3 (1): Rebinned")
 
 '''run 4: OG + PRad'''
 max_N = 10  # change for small Prad. N must always start at 1, and go to max_N
 lambdas = [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.11,0.12,0.13,0.14,0.15,0.2, 0.3, 0.4, 0.5, 0.6,0.7,0.8,0.9]
 data_filepath = "data/OG+PRadCrossSectionsData.dat"
-run_set_find_order_param_print(max_N, lambdas, data_filepath, "RUN 4: OG+PRad")
+run_set_find_order_param_print(max_N, lambdas, data_filepath, "RUN 4 (1): OG+PRad")
 
 '''run 5: PRad'''
 max_N = 5  # change for small Prad. N must always start at 1, and go to max_N

@@ -1,8 +1,8 @@
 import pandas as pd
 import numpy as np
-import fit
-import plot
-from plot import plot_ge_gm
+import modified_fit
+import modified_plot
+from modified_plot import plot_ge_gm
 import models
 
 cols = {

@@ -30,7 +30,7 @@ def read_cs_data():
         10: "norms",  # Specific combination of normalization parameters
     }
     data = pd.read_csv(
-        "data/RebinnedCrossSectionsData.dat", sep=" ", skiprows=1, usecols=cols.keys(), names=cols.values()
+        "data/CrossSections.dat", sep=" ", skiprows=1, usecols=cols.keys(), names=cols.values()
     )
     # Format normalization indices as lists:
     data["norms"] = [[int(i) for i in s.split(":")] for s in data["norms"]]
@@ -127,7 +127,6 @@ def group_validation(data, order, norms, reg_param):
         _, chi2_train, chi2_test, _, _ = fit(train_data, test_data, order, reg_param, norms=norms)
         running_train += chi2_train
         running_test += chi2_test
-    print(running_train / 17, running_test)
     print("chi^2_train = {:.0f}, chi^2_test = {:.0f}".format(running_train / 17, running_test))
 
 
@@ -212,9 +211,5 @@ def parse_args():
 
 if __name__ == "__main__":
     ARGS = parse_args()
-    main(8, 0.15)
-    main(9, 0.15)
-
-
-    # main(ARGS.order, ARGS.reg_param)
+    main(ARGS.order, ARGS.reg_param)
 

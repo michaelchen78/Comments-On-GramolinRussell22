@@ -23,7 +23,7 @@ N_SAMPLES = 1000
 def read_Rosenbluth_data():
     """Read data for G_E and G_M from "Rosenbluth.dat"."""
     col_names = ["Q2", "GE", "delta_GE", "GM", "delta_GM"]
-    data = pd.read_csv("data/Rosenbluth.dat", sep=" ", skiprows=5, names=col_names)
+    data = pd.read_csv("../data/Rosenbluth.dat", sep=" ", skiprows=5, names=col_names)
     return data
 
 
@@ -411,7 +411,7 @@ vtffratio = list(map(np.add,veffratio,vsffratio))
 
 if __name__ == "__main__":
 
-    main(5, 0.02, "data/CrossSections.dat")
+    main(5, 0.02, "../data/CrossSections.dat")
     #main(0, 0, "data/RebinnedCrossSectionsData.dat")
     #main(0, 0, "data/OG+PRadCrossSectionsData.dat")
     #main(0, 0, "data/Rebinned+PRadCrossSectionsData.dat")

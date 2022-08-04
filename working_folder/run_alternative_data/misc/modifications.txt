@@ -1,3 +1,6 @@
+*this is pretty old. please see final_supplementary_material.edits.txt and final_supplementary_material.modified_fit.py for what is really a better version of this
+*this corresponds to the working_folder.run_alternative_data.modified_fit.py
+
 The following modifications have been made to fit.py: (all these changes were intended to be ineffectual, simply to allow for convenience.
 # [MOD 1A: N_NORM_PARAMS and BEAM_ENERGIES will be assigned in read_cs_data. Dummy values assigned here.]
 # [MOD 1B: code to create and assign values to BEAM_ENERGIES AND N_NORM_PARAMS, below]

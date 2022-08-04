@@ -1,4 +1,4 @@
-from working_folder.run_alternative_data import fit
+from working_folder.run_alternative_data import modified_fit
 import numpy as np
 
 
@@ -7,7 +7,7 @@ import numpy as np
 def find_fit_order_and_tikhonov_params(data, n_norm_params, max_N, lambdas):
     print("PROGRESS:\n")
 
-    print("globals at start (n, b, s): ", fit.N_NORM_PARAMS, fit.BEAM_ENERGIES, fit.SPECTROMETERS)
+    print("globals at start (n, b, s): ", modified_fit.N_NORM_PARAMS, fit.BEAM_ENERGIES, fit.SPECTROMETERS)
 
     print("performing cross validation without regularization...")
     '''Perform 18-fold group cross-validation WITHOUT regularization'''
@@ -72,7 +72,7 @@ def get_table_ii(orders_included, optimal_reg_params, data, n_norm_params):
         fit_cov = cov[n_norm_params:, n_norm_params:]
 
         # Extract the radii:
-        b2, b2_sigma = fit.get_b2(fit_params, fit_cov)
+        b2, b2_sigma = modified_fit.get_b2(fit_params, fit_cov)
         radius, radius_stat = fit.get_radius(b2, b2_sigma)
 
         table2[counter] = round(order, 1), best_reg_param, L, chi2, b2, radius
