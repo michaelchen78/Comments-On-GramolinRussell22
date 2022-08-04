@@ -22,7 +22,7 @@ First, ```alt_data_methods.py``` and ```run_alt_data.py``` are essentially just 
 
 The rest of the files are the meat:
 > ```plot_alt_data.py``` is the most important file, it makes the plot (mostly my own code so might not be as clean)
-> ```modified_fit.py``` and ```modified_plot.py``` are modified versions of Gramolin's code which are used in all of the other scripts.
-> 
+> ```modified_fit.py``` and ```modified_plot.py``` are modified versions of Gramolin's code which are used in  the other scripts. ```models.py``` is Gramolin's code which is also used in other scripts.
+> ```asym_chi2.py``` runs the chi^2 tests for the models against the asymmetry data.
 
 
