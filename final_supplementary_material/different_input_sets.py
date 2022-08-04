@@ -90,7 +90,7 @@ def replicate_table_ii(orders_included, optimal_reg_params, data, n_norm_params)
 
 # Prints replications of Tables I and II to the console with corollary information
 def print_table_replications(max_N, lambdas, data_filepath, data_file_name):
-    print("\n\nDATA FILE: ", data_file_name)
+    print("\n\n\nDATA FILE: ", data_file_name)
 
     data = modified_fit.read_cs_data(data_filepath)  # This will change N_NORM_PARAMS, BEAM_ENERGIES, and SPECTROMETERS
     # to the correct values in modified_fit.py. Avoid running programs in parallel to ensure conservation of constants.

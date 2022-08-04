@@ -177,8 +177,8 @@ def plot_rhos(data, order, reg_param):
 def plot_ge_gm(cs_data, order, reg_param, R_data=read_Rosenbluth_data(), Q2_max=1, precision=100):  # [MOD: made rosenbluth data hard coded]
     """Plot the Sachs electric and magnetic form factors."""
     params, cov = calc_params(cs_data, order, reg_param)
-    Q2_range = np.linspace(0, Q2_max, 100)  # [MOD HERE]
-    #Q2_range = np.linspace(0, Q2_max, int(Q2_max*precision + 1))  # [MOD HERE]
+    #Q2_range = np.linspace(0, Q2_max, 100)  # [MOD HERE]
+    Q2_range = np.linspace(0, Q2_max, int(Q2_max*precision + 1))  # [MOD HERE]
     GE, GM = calc_ge_gm(Q2_range, params, order)
 
     if fit.covariance_bad(cov):
