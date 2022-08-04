@@ -1,5 +1,8 @@
+import copy
+
 import matplotlib
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 import matplotlib.transforms as mtransforms
 import matplotlib.gridspec as gridspec
 
@@ -8,6 +11,7 @@ import pandas as pd
 
 import scipy
 import scipy.stats as st
+from matplotlib.lines import Line2D
 from scipy.stats import norm
 
 
@@ -73,6 +77,25 @@ def calc_stat_error_simple(GE, GM, interval):
     f_stat_low = (GE / GM) - sigma_f_low
 
     return f_stat_low, f_stat_up
+
+
+def calc_stat_error_montecarlo(Q2_range, cs_data, order, reg_param):
+    params, cov = plot.calc_params(cs_data, order, reg_param)
+    params = np.random.multivariate_normal(params, cov, size=N_SAMPLES)
+    out = np.array([calc_ge_gm(Q2_range, param, order) for param in params])
+    print(out.shape, " should be 1000 rows each of 2 arrays each of 1400 or something elements")
+    ge_gm_distribution = []
+    for row in out:
+        ge = row[0]
+        gm = row[1]
+        ratio = ge / gm
+        ge_gm_distribution.append(ratio)
+    ge_gm_distribution = np.asarray(ge_gm_distribution)
+
+    stat_up = np.percentile(ge_gm_distribution, 84.1, axis=0)
+    stat_down = np.percentile(ge_gm_distribution, 15.9, axis=0)
+
+    return stat_down, stat_up
 
 
 def trim_zero(Q2_range, interval):
@@ -256,10 +279,40 @@ def calc_stat_error_ratio_distribution(interval, Q2_range):
 
 
 # Returns the width of the two systematic error bands
-def calc_sys_error(GE, GM, f1_low, f1_up, f2_low, f2_up):
+def calc_sys_error_separate(GE, GM, f1_low, f1_up, f2_low, f2_up):
     f_sys_up = (GE / GM) * np.sqrt((f1_up / GE) ** 2 + (f2_low / GM) ** 2)  # f2_low is used here because f \alpha 1/GM
     f_sys_low = (GE / GM) * np.sqrt((f1_low / GE) ** 2 + (f2_up / GM) ** 2)  # ^the same reason for this line
     return f_sys_low, f_sys_up
+
+
+def calc_ge_over_gm(Q2_range, params, order):
+    """Calculate GE / GM"""
+    GE, GM = models.calc_ge_gm(Q2_range, params, order)
+    return GE / GM
+
+
+# Modified version of calc_sys_bands(calc_func, x_range, data, order, reg_param) from the original plot.py
+def calc_sys_error_original(x_range, data, order, reg_param):
+    """Calculate systematic error bands for given quantity."""
+    params, _ = plot.calc_params(data, order, reg_param)
+    ff_ratio = calc_ge_over_gm(x_range, params, order)
+    mincut_params = fit.fit_systematic_variant("cs_mincut", data, order, reg_param)[0]
+    maxcut_params = fit.fit_systematic_variant("cs_maxcut", data, order, reg_param)[0]
+    sysup_params = fit.fit_systematic_variant("cs_sysup", data, order, reg_param)[0]
+    syslow_params = fit.fit_systematic_variant("cs_syslow", data, order, reg_param)[0]
+    mincut_ff_ratio = calc_ge_over_gm(x_range, mincut_params, order)
+    maxcut_ff_ratio = calc_ge_over_gm(x_range, maxcut_params, order)
+    sysup_ff_ratio = calc_ge_over_gm(x_range, sysup_params, order)
+    syslow_ff_ratio = calc_ge_over_gm(x_range, syslow_params, order)
+    # Calculate upper and lower limits for each of the systematic variations:
+    ff_ratio_cut_up = np.clip(np.max(np.stack([mincut_ff_ratio - ff_ratio, maxcut_ff_ratio - ff_ratio]), 0), 0, None)
+    ff_ratio_cut_low = np.clip(np.min(np.stack([mincut_ff_ratio - ff_ratio, maxcut_ff_ratio - ff_ratio]), 0), None, 0)
+    ff_ratio_sys_up = np.clip(np.max(np.stack([sysup_ff_ratio - ff_ratio, syslow_ff_ratio - ff_ratio]), 0), 0, None)
+    ff_ratio_sys_low = np.clip(np.min(np.stack([sysup_ff_ratio - ff_ratio, syslow_ff_ratio - ff_ratio]), 0), None, 0)
+    # Add two systematic "errors" in quadrature:
+    ff_ratio_up = np.sqrt(ff_ratio_cut_up ** 2 + ff_ratio_sys_up ** 2)
+    ff_ratio_low = np.sqrt(ff_ratio_cut_low ** 2 + ff_ratio_sys_low ** 2)
+    return ff_ratio_low, ff_ratio_up
 
 
 def plot_data_set(cs_data, order, reg_param, Q2_max, axes):
@@ -270,13 +323,16 @@ def plot_data_set(cs_data, order, reg_param, Q2_max, axes):
     GE, GM, Q2_range, interval, f1_up, f1_low, f2_up, f2_low = plot_ge_gm(cs_data, order, reg_param, Q2_max=Q2_max)
 
     # Plot the best-fit line for G_E*mu/G_M
-    axes.plot(Q2_range, GE / GM, color="black", lw=1, alpha=0.7, label="Gramolin")
+    # axes.plot(Q2_range, GE / GM, color="black", lw=1, alpha=0.7, label="Gramolin")
+    axes.plot(Q2_range, GE / GM, color="black", lw=1, alpha=0.7)
 
-    # Calculate the statistical uncertainties using a ratio distribution
+    # Calculate the statistical uncertainties using a ratio distribution/monte carlo/separate
     f_stat_low, f_stat_up = calc_stat_error_simple(GE, GM, interval)  # the top and bottom of a stat band
     # f_stat_low, f_stat_up = calc_stat_error_ratio_distribution(interval, Q2_range)
-    # Calculate the systematic uncertainties using standard propagation
-    f_sys_low, f_sys_up = calc_sys_error(GE, GM, f1_low, f1_up, f2_low, f2_up)  # discrete band widths (independent)
+    # f_stat_low, f_stat_up = calc_stat_error_montecarlo(Q2_range, cs_data, order, reg_param)
+    # Calculate the systematic uncertainties using standard propagation/author's og method
+    # f_sys_low, f_sys_up = calc_sys_error_separate(GE, GM, f1_low, f1_up, f2_low, f2_up)  # discrete band widths (independent)
+    f_sys_low, f_sys_up = calc_sys_error_original(Q2_range, cs_data, order, reg_param)
 
     trim_Q2 = False
     if trim_Q2:
@@ -284,13 +340,13 @@ def plot_data_set(cs_data, order, reg_param, Q2_max, axes):
         f_sys_up = f_sys_up[1:]
         f_sys_low = f_sys_low[1:]
     # Plot the statistical band
-    axes.fill_between(Q2_range, f_stat_up, f_stat_low, color="#FFAAAA", lw=0, alpha=0.7)
+    axes.fill_between(Q2_range, f_stat_up, f_stat_low, color="#FFAAAA", lw=0, alpha=0.75)
     # Plot the systematic bands
-    axes.fill_between(Q2_range, f_stat_up + f_sys_up, f_stat_up, color="red", lw=0, alpha=0.7)
-    axes.fill_between(Q2_range, f_stat_low, f_stat_low - f_sys_low, color="red", lw=0, alpha=0.7)
+    axes.fill_between(Q2_range, f_stat_up + f_sys_up, f_stat_up, color="red", lw=0, alpha=0.75)
+    axes.fill_between(Q2_range, f_stat_low, f_stat_low - f_sys_low, color="red", lw=0, alpha=0.75)
 
     """Plot asymmetry data"""
-    studies = ["asymdata/Punjabi.dat", "asymdata/Paolone.dat", "asymdata/Crawford.dat", "asymdata/Zhan.dat"]
+    studies = ["asymdata/Crawford.dat", "asymdata/Punjabi.dat", "asymdata/Paolone.dat", "asymdata/Zhan.dat"]
 
     # Display choices
     colors = ["blue", "purple", "darkorange", "green"]
@@ -362,19 +418,55 @@ def plot_data_set(cs_data, order, reg_param, Q2_max, axes):
 
     Q2list = np.linspace(0, 1.0, 201)
     mup = 1 + models.kappa
-    alarcon_ge = GEp(Q2list, 0.843 ** 2, r2En)
+    alarcon_ge = GEp(Q2list, 0.842 ** 2, r2En)
     alarcon_gm = GMp(Q2list, 0.85 ** 2, r2Mn) / mup
 
     # Plot proton electric form factor
-    axes.plot(Q2list, alarcon_ge/alarcon_gm, '--', label='Alarcon and Weiss', color='black', lw=1)
+    # axes.plot(Q2list, alarcon_ge/alarcon_gm, '--', label='Alarcon and Weiss', color='grey', lw=1)
+
+    # Plot error
+    re_distribution = np.random.normal(0.842, 0.002, 1000)
+    rm_distribution = np.random.normal(0.850, 0.001, 1000)
+    re_rm_distribution = np.stack([re_distribution, rm_distribution], axis=1)
+    ge_gm_distribution = []
+    for row in re_rm_distribution:
+        re = row[0]
+        rm = row[1]
+        ge = GEp(Q2list, re ** 2, r2En)
+        gm = GMp(Q2list, rm ** 2, r2Mn) / mup
+        ratio = ge / gm
+        ge_gm_distribution.append(ratio)
+    ge_gm_distribution = np.asarray(ge_gm_distribution)
+    stat_up = np.percentile(ge_gm_distribution, 84.1, axis=0)
+    stat_down = np.percentile(ge_gm_distribution, 15.9, axis=0)
+    axes.fill_between(Q2list, stat_up, stat_down, color='grey', lw=0, alpha=0.4, label="Alarcon and Weiss")
 
 
-def plot_subplot(data_file_name, order, reg_param, title, label, axes_coordinates, Q2_max, y_min,
-                 y_max, legend=False, x_off=False, y_off=False, rectangle_settings=True):
+def draw_model_handle(ax, pos, size):
+    x = pos[0]
+    start_y = pos[1]
+    width = size[0]
+    height = size[1]
+    rect1 = matplotlib.patches.Rectangle((x,start_y), width, height/4, color = "red")
+    rect2 = matplotlib.patches.Rectangle((x,start_y+height/4), width, height/2, color = "#FFAAAA")
+    rect3 = matplotlib.patches.Rectangle((x,start_y+0.75*height), width, height/4, color = "red")
+    line = matplotlib.patches.Rectangle((x, start_y+height*0.5), width, 0.0001, color = "black")
 
+    ax.add_patch(rect1)
+    ax.add_patch(rect2)
+    ax.add_patch(rect3)
+    ax.add_patch(line)
+
+
+def plot_subplot(data_file_name, order, reg_param, title, label, axes_coordinates, Q2_max, y_min, y_max, legend=False,
+                 x_off=False, y_off=False, rectangle_settings=True, erase_x_0=True, erase_y_0=False):
+    handle_on = False
+    bold = True
     if rectangle_settings:
-        label_pos = 0.043, 1.025
-        model_param_pos = 1.22, 1.028
+        label_pos = 0.053, 1.029
+        model_param_pos = 1.06, 1.028
+        if bold:
+            model_param_pos = 1.01, 1.028
     else:
         label_pos = 0.043, 1.025
         model_param_pos = 0.813, 1.028
@@ -385,7 +477,20 @@ def plot_subplot(data_file_name, order, reg_param, title, label, axes_coordinate
     # Axes and limits
     ax = axes_coordinates
     x_ticks = ax.xaxis.get_major_ticks()
-    x_ticks[0].label1.set_visible(False)
+    y_ticks = ax.yaxis.get_major_ticks()
+
+    if erase_x_0:
+        x_ticks[0].label1.set_visible(False)
+    if erase_y_0:
+        # tick_last = copy.deepcopy(y_ticks[len(y_ticks)-1])
+        # tick_second_last = copy.deepcopy(y_ticks[len(y_ticks)-2])
+        #y_ticks[0].label1.set_visible(False)
+        y_ticks[len(y_ticks)-1].label1.set_visible(False)
+        # y_ticks.remove(y_ticks[0])
+
+
+    ax.tick_params(axis='x', labelsize=24)
+    ax.tick_params(axis='y', labelsize=24)
 
     if x_off:
         ax.xaxis.set_visible(False)
@@ -393,9 +498,20 @@ def plot_subplot(data_file_name, order, reg_param, title, label, axes_coordinate
         ax.yaxis.set_visible(False)
 
     # ax.set_title(title, fontstyle='italic')
-    axes_coordinates.annotate(label, label_pos, ha='center', va='center', fontsize=24, color='black')
-    axes_coordinates.annotate(r'\emph{N} = %d, $\lambda = %.2f$' % (order, reg_param), model_param_pos, ha='center',
-                              va='center', fontsize=18, color='black')
+    axes_coordinates.annotate(label, label_pos, ha='center', va='center', fontsize=28, color='black')
+    if bold:
+        axes_coordinates.annotate(r'\textbf{Model: \emph{N} = %d,} $\mathbf{\lambda = %.2f}$' % (order, reg_param), model_param_pos, ha='center',
+                                  va='center', fontsize=22, color='#FF0000')
+    else:
+        axes_coordinates.annotate(r'Model: \emph{N} = %d, $\lambda = %.2f$' % (order, reg_param),
+                                  model_param_pos, ha='center',
+                                  va='center', fontsize=24, color='red')
+
+    x_handle = model_param_pos[0] - 0.43
+    y_handle = model_param_pos[1] - 0.0097
+
+    if handle_on:
+        draw_model_handle(ax, (x_handle, y_handle), (0.08, 0.022))
     # axes_coordinates.text(0.01, 1.085, title, fontsize='small', verticalalignment='top', fontfamily='serif',
     #        bbox=dict(facecolor='0.7', edgecolor='none'))
     plot_data_set(cs_data, order, reg_param, Q2_max, ax)
@@ -403,7 +519,8 @@ def plot_subplot(data_file_name, order, reg_param, title, label, axes_coordinate
     ax.set_xlim(0, Q2_max)
     if legend:
         handles, labels = ax.get_legend_handles_labels()
-        labels[0] = "Model"
+        # labels[0] = "Model"
+        # handles[0] = red_patch = mpatches.Patch(facecolor='#FFAAAA', edgecolor="red", label='The red data')
         ax.legend(handles, labels, loc='lower left', frameon=False, fontsize='small')
     # else:
         # handles, labels = ax.get_legend_handles_labels()
@@ -412,6 +529,7 @@ def plot_subplot(data_file_name, order, reg_param, title, label, axes_coordinate
 
 def main():  # other legend options?
     rectangle_settings = True
+    legends_on = False
 
     if rectangle_settings:
         figsize = (18,12)
@@ -421,21 +539,22 @@ def main():  # other legend options?
         Q2_max = 1.4
     else:
         figsize = (13, 13)
+        #figsize = (18,12)
         x_axis_pos = 0.5, 0.04
         y_axis_pos = 0.045, 0.5
         wspace=0.025
-        Q2_max = 1.4
+        Q2_max = 1.0
 
     # Plotting all the subplots
     fig, axes = plt.subplots(2, 2, sharex=True, sharey=True, figsize=figsize)
     fig.subplots_adjust(hspace=0.025, wspace=wspace)
-    fig.text(x_axis_pos[0], x_axis_pos[1], r"$Q^2$ [GeV/c]$^2$", ha='center')
-    fig.text(y_axis_pos[0], y_axis_pos[1], r"$\mu$ $G_{E}$/$G_{M}$", va='center', rotation='vertical')
+    fig.text(x_axis_pos[0], x_axis_pos[1], r"$Q^2$ [GeV/c]$^2$", ha='center', fontsize=30)
+    fig.text(y_axis_pos[0], y_axis_pos[1], r"$\mu$ $G_{E}$/$G_{M}$", va='center', rotation='vertical', fontsize=30)
 
     # fig.suptitle('TITLE')
     Q2_max = Q2_max
     y_max = 1.05
-    y_min = 0.6
+    y_min = 0.7
     title_type = "normal"
 
     '''OG data'''
@@ -443,40 +562,40 @@ def main():  # other legend options?
     reg_param = 0.02
     data_file_name = "data/CrossSections.dat"
     title = r'Bernauer \emph{et al.}'
-    label = r'a)'
+    label = r'\textbf{a)}'
     axes_coordinates = axes[0, 0]
     plot_subplot(data_file_name, order, reg_param, title, label, axes_coordinates,
-                 Q2_max, y_min, y_max, legend=True, x_off=True, rectangle_settings=rectangle_settings)
+                 Q2_max, y_min, y_max, legend=True, x_off=True, rectangle_settings=rectangle_settings, erase_y_0=False)
 
     '''Rebinned Data'''
     order = 5
     reg_param = 0.01
     data_file_name = "data/RebinnedCrossSectionsData.dat"
     title = r'Lee \emph{et al.}'
-    label = r'b)'
+    label = r'\textbf{b)}'
     axes_coordinates = axes[0,1]
     plot_subplot(data_file_name, order, reg_param, title, label, axes_coordinates, Q2_max,
-                 y_min, y_max, x_off=True, y_off=True, rectangle_settings=rectangle_settings)
+                 y_min, y_max, x_off=True, legend=legends_on, y_off=True, rectangle_settings=rectangle_settings)
 
     '''OG+PRad Data'''
     order = 7
     reg_param = 0.63
     data_file_name = "data/OG+PRadCrossSectionsData.dat"
     title = r'Bernauer \emph{et al.} + Xiong \emph{et al.}'
-    label = r'c)'
+    label = r'\textbf{c)}'
     axes_coordinates = axes[1, 0]
-    plot_subplot(data_file_name, order, reg_param, title, label, axes_coordinates,
-                 Q2_max, y_min, y_max, rectangle_settings=rectangle_settings)
+    plot_subplot(data_file_name, order, reg_param, title, label, axes_coordinates, Q2_max, y_min, y_max,
+                 legend=legends_on, rectangle_settings=rectangle_settings, erase_x_0=False, erase_y_0=False)
 
     '''Rebinned+PRad Data'''
     order = 6
     reg_param = 0.1
     data_file_name = "data/Rebinned+PRadCrossSectionsData.dat"
     title = r'Lee \emph{et al.} + Xiong \emph{et al.}'
-    label = r'd)'
+    label = r'\textbf{d)}'
     axes_coordinates = axes[1,1]
-    plot_subplot(data_file_name, order, reg_param, title,
-                 label, axes_coordinates, Q2_max, y_min, y_max, y_off=True, rectangle_settings=rectangle_settings)
+    plot_subplot(data_file_name, order, reg_param, title, label, axes_coordinates, Q2_max, y_min, y_max,
+                 legend=legends_on, y_off=True, rectangle_settings=rectangle_settings)
 
     # Final plot settings
     # handles, labels = ax.get_legend_handles_labels()

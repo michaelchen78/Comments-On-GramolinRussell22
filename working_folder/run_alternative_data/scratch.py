@@ -166,7 +166,7 @@ def calc_stat_error_ratio_distribution(interval, Q2_range):
         sigma_sq = scipy.integrate.quad(sigma_integrand, -np.inf, np.inf)[0]
         sigma = np.sqrt(sigma_sq)
 
-
+        '''
         # Testing the pdf-->0 results
         pdf_integral = scipy.integrate.quad(func_ratio_distribution, -np.inf, np.inf)
 
@@ -174,8 +174,9 @@ def calc_stat_error_ratio_distribution(interval, Q2_range):
         print(pdf_integral)
         print("x mean, x sigma, y mean, y sigma, ", x_mean, " ", x_sigma, " ", y_mean, " ", y_sigma)
         print("mu sigma: ", mu, " ", sigma)
-
+        '''
         return mu, sigma
+
 
     '''
     # [TESTING] ensures sigma/mu calculated above matches with rigorous scipy test
@@ -210,6 +211,7 @@ def calc_stat_error_ratio_distribution(interval, Q2_range):
             print("My makeshift method numbers: ", jank_mu, " ", jank_sigma)
     '''
 
+    '''
     # Testing -- checks to see if generated ratio pdf is normal (68% matches)
     nums = (50, 100)
     for num in nums:
@@ -234,7 +236,7 @@ def calc_stat_error_ratio_distribution(interval, Q2_range):
         mu_percentile = p1 + sigma_percentile
         print("percentile: p1: ", p1, ", p2: ", p2, ", sigma: ", sigma_percentile, ", mu: ", mu_percentile)
         print("analytical: ", calc_mu_sigma(mu_ge[num], sigma_ge[num], mu_gm[num], sigma_gm[num]))
-
+    '''
 
     # This array's first row is mu's and second row is sigma's; everything is mapped from Q^2, consistent with Gramolin.
     mu_sigma_array = np.empty((2, len(Q2_range)))
@@ -376,28 +378,88 @@ def plot_data_set(cs_data, order, reg_param, Q2_max, axes):
 
     Q2list = np.linspace(0, 1.0, 1001)
     mup = 1 + models.kappa
-    alarcon_ge = GEp(Q2list, 0.843 ** 2, r2En)
-    alarcon_gm = GMp(Q2list, 0.85 ** 2, r2Mn) / mup
+    re_distribution = np.random.normal(0.842, 0.002, 1000)
+    rm_distribution = np.random.normal(0.850, 0.001, 1000)
+    print(re_distribution)
+    print(rm_distribution)
+
+    #for re in re_distribution:
+    #    axes.plot(Q2list, GEp(Q2list, re ** 2, r2En) / dip(Q2list), color='red', lw=1)
+    #for rm in rm_distribution:
+    #    axes.plot(Q2list, GMp(Q2list, rm ** 2, r2En) / dip(Q2list) / mup, color='blue', lw=1)
+
+    re_rm_distribution = np.stack([re_distribution, rm_distribution], axis=1)
+    print(re_rm_distribution.shape)
+    print(re_rm_distribution)
+    ge_gm_distribution = []
+    for row in re_rm_distribution:
+        re = row[0]
+        rm = row[1]
+        ge = GEp(Q2list, re ** 2, r2En) / dip(Q2list)
+        gm = GMp(Q2list, rm ** 2, r2Mn) / dip(Q2list) / mup
+        ratio = ge/gm
+        ge_gm_distribution.append(ratio)
+    ge_gm_distribution = np.asarray(ge_gm_distribution)
+    print(ge_gm_distribution.shape)
+
+    stat_up = np.percentile(ge_gm_distribution, 84.1, axis=0)
+    stat_down = np.percentile(ge_gm_distribution, 15.9, axis=0)
+
+    axes.fill_between(Q2list, stat_up, stat_down, color='green', lw=0, alpha=0.4)
+    axes.plot(Q2list, stat_up, label='monte carlo up', color='green', lw=1)
+    axes.plot(Q2list, stat_down, label='monte carlo down', color='green', lw=1)
+
+    gm_ratio_up = GEp(Q2list, 0.842 ** 2, r2En) / (GMp(Q2list, 0.851 ** 2, r2Mn) / mup)
+    gm_ratio_down = GEp(Q2list, 0.842 ** 2, r2En) / (GMp(Q2list, 0.849 ** 2, r2Mn) / mup)
+    #axes.fill_between(Q2list, gm_ratio_up, gm_ratio_down, color='blue', lw=0, alpha=0.4)
+    axes.plot(Q2list, gm_ratio_up, label='just gm up', color='blue', lw=1)
+    axes.plot(Q2list, gm_ratio_down, label='just gm down', color='blue', lw=1)
+
+
+    interval = np.empty((2,2,len(Q2list)))
+    interval[1][0] = GEp(Q2list, 0.840 ** 2, r2En)  # top
+    interval[0][0] = GEp(Q2list, 0.844 ** 2, r2En)  # bottom
+    interval[1][1] = GMp(Q2list, 0.851 ** 2, r2Mn) / mup
+    interval[0][1] = GMp(Q2list, 0.849 ** 2, r2Mn) / mup
+
+
+
+    simple_up, simple_down = calc_stat_error_simple(GEp(Q2list, 0.842 ** 2, r2En), GMp(Q2list, 0.85 ** 2, r2Mn) / mup, interval)
+    axes.fill_between(Q2list, simple_up, simple_down, color='red', lw=0, alpha=0.4)
+    axes.plot(Q2list, simple_up, label='sep up', color='red', lw=1)
+    axes.plot(Q2list, simple_down, label='sep down', color='red', lw=1)
+
+
+
+    alarcon_ge = GEp(Q2list, 0.842 ** 2, r2En)
+    alarcon_gm = GMp(Q2list, 0.850 ** 2, r2Mn) / mup
     #axes.fill_between(Q2list, GEp(Q2list, 0.844 ** 2, r2En) / dip(Q2list), GEp(Q2list, 0.840 ** 2, r2En) / dip(Q2list),
     #              label='alarcon ge', color='red', lw=2, zorder=11, alpha=0.75)
     #axes.fill_between(Q2list, GMp(Q2list, 0.849 ** 2, r2Mn) / mup / dip(Q2list),
     #                  GMp(Q2list, 0.851 ** 2, r2Mn) / mup / dip(Q2list),
     #                  label='alarcon gm', color='green', lw=2, alpha=0.75, zorder=111)
     #axes.plot(Q2list, GEp(Q2list, 0.842 ** 2, r2En) / dip(Q2list),label='alarcon ge', color='red', lw=1)
-    axes.plot(Q2list, GMp(Q2list, 0.850 ** 2, r2Mn) / mup / dip(Q2list),label='alarcon gm/mu/dip', color='green', lw=1)
+    #axes.plot(Q2list, GMp(Q2list, 0.850 ** 2, r2Mn) / mup / dip(Q2list),label='alarcon gm/mu/dip', color='green', lw=1)
     # Plot proton electric form factor
     # axes.plot(Q2list, alarcon_ge, '--', label='alarcon ge', color='red', lw=1)
-    axes.plot(Q2list, alarcon_gm, '--', label='alarcon gm / mu', color='green', lw=1)
+    #axes.plot(Q2list, alarcon_gm, '--', label='alarcon gm / mu', color='green', lw=1)
 
-    print(Q2list)
-    print(alarcon_ge)
-    print(alarcon_gm)
-    #axes.plot(Q2list, alarcon_ge/alarcon_gm, '--', label='alarcon ratio', color='black', lw=1)
+    #print(Q2list)
+    #print(alarcon_ge)
+    #print(alarcon_gm)
+    axes.plot(Q2list, alarcon_ge/alarcon_gm, '--', label='alarcon ratio', color='black', lw=1)
 
+
+    #fancy_up, fancy_down = calc_stat_error_ratio_distribution(interval, Q2list)
+    #trim_Q2 = True
+    #if trim_Q2:
+    #    Q2list = Q2list[1:]
+    #axes.fill_between(Q2list, fancy_up, fancy_down, color='purple', lw=0, alpha=0.4)
+    #axes.plot(Q2list, fancy_up, label='up', color='purple', lw=1)
+    #axes.plot(Q2list, fancy_down, label='down', color='purple', lw=1)
 
 def plot_subplot(data_file_name, order, reg_param, title, label, axes_coordinates, Q2_max, y_min,
-                 y_max, legend=False, x_off=False, y_off=False, rectangle_settings=True):
-
+                 y_max, legend=False, x_off=False, y_off=False, rectangle_settings=True, on=True):
     if rectangle_settings:
         label_pos = 0.043, 1.025
         model_param_pos = 1.22, 1.028
@@ -424,13 +486,14 @@ def plot_subplot(data_file_name, order, reg_param, title, label, axes_coordinate
                               va='center', fontsize=18, color='black')
     # axes_coordinates.text(0.01, 1.085, title, fontsize='small', verticalalignment='top', fontfamily='serif',
     #        bbox=dict(facecolor='0.7', edgecolor='none'))
+
     plot_data_set(cs_data, order, reg_param, Q2_max, ax)
     ax.set_ylim(y_min, y_max)
     ax.set_xlim(0, Q2_max)
     if legend:
         handles, labels = ax.get_legend_handles_labels()
-        labels[0] = "ratio gramolin"
-        ax.legend(handles, labels, loc='lower left', frameon=False)
+        #labels[0] = "ratio gramolin"
+        ax.legend(handles, labels, loc='lower left', frameon=False, fontsize="x-small")
     # else:
         # handles, labels = ax.get_legend_handles_labels()
         # ax.legend(handles, labels, loc='lower left', frameon=False)
@@ -472,7 +535,7 @@ def main():  # other legend options?
     label = r'a)'
     axes_coordinates = axes[0, 0]
     plot_subplot(data_file_name, order, reg_param, title, label, axes_coordinates,
-                 Q2_max, y_min, y_max, legend=False, x_off=True, rectangle_settings=rectangle_settings)
+                 Q2_max, y_min, y_max, legend=True, x_off=True, rectangle_settings=rectangle_settings)
 
     '''Rebinned Data'''
     order = 5
@@ -481,8 +544,8 @@ def main():  # other legend options?
     title = r'Lee \emph{et al.}'
     label = r'b)'
     axes_coordinates = axes[0,1]
-    plot_subplot(data_file_name, order, reg_param, title, label, axes_coordinates, Q2_max,
-                 y_min, y_max, x_off=True, y_off=True, rectangle_settings=rectangle_settings)
+    #plot_subplot(data_file_name, order, reg_param, title, label, axes_coordinates, Q2_max,
+    #             y_min, y_max, x_off=True, y_off=True, rectangle_settings=rectangle_settings, legend=True, on=False)
 
     '''OG+PRad Data'''
     order = 7
@@ -491,8 +554,8 @@ def main():  # other legend options?
     title = r'Bernauer \emph{et al.} + Xiong \emph{et al.}'
     label = r'c)'
     axes_coordinates = axes[1, 0]
-    plot_subplot(data_file_name, order, reg_param, title, label, axes_coordinates,
-                 Q2_max, y_min, y_max, rectangle_settings=rectangle_settings)
+    #plot_subplot(data_file_name, order, reg_param, title, label, axes_coordinates,
+    #             Q2_max, y_min, y_max, rectangle_settings=rectangle_settings)
 
     '''Rebinned+PRad Data'''
     order = 6
@@ -501,8 +564,8 @@ def main():  # other legend options?
     title = r'Lee \emph{et al.} + Xiong \emph{et al.}'
     label = r'd)'
     axes_coordinates = axes[1,1]
-    plot_subplot(data_file_name, order, reg_param, title,
-                 label, axes_coordinates, Q2_max, y_min, y_max, y_off=True, rectangle_settings=rectangle_settings)
+    #plot_subplot(data_file_name, order, reg_param, title,
+    #             label, axes_coordinates, Q2_max, y_min, y_max, y_off=True, rectangle_settings=rectangle_settings)
 
     # Final plot settings
     handles, labels = axes[1,1].get_legend_handles_labels()
