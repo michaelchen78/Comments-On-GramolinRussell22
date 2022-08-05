@@ -4,7 +4,7 @@ I thought I'd start off with some brief notes on ```run_alternative_data.plot_al
 
 > plot_data_set(...) plots the asymmetry data and Alarcon and Weiss along with a given data set's Gramolin model onto a set of axes (representing a panel)
 
-> plot_subplot(...) is still for a specific axes, it calls plot_data_set on that axes and adds essentially all the settings for each panel. There's a bunch of pre-defined parameters to adjust these settings. main() calls this method for each data set and puts in the settings. main() also contains whole-figure settings (draw_model_handle(ax, pos, size) is a helper for plot_subplot(...)). See comments
+> plot_subplot(...) is still for a specific axes, it calls plot_data_set on that axes and adds essentially all the settings for each panel. There's a bunch of pre-defined parameters to adjust these settings. main() calls this method for each data set and puts in the settings. main() also contains whole-figure settings. See comments. *(draw_model_handle(ax, pos, size) is a helper for plot_subplot(...))
 # More information
 You should be able to ignore the following folders:
 > ```main_working_folder```, contains my draft work 
