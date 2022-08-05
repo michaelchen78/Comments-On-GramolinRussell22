@@ -1,3 +1,11 @@
+I thought I'd start off with some brief notes on ```run_alternative_data.plot_alt_data.py```, since that's most important. Below the notes is more information on the directory.
+# Notes on ```plot_alt_data.py```
+> The methods FROM assign_band_curves(interval) TO calc_sys_error_original(...) are all for calculating error bands.
+
+> plot_data_set(...) plots the asymmetry data and Alarcon and Weiss along with a given data set's Gramolin model onto a set of axes (representing a panel)
+
+> plot_subplot(...) is still for a specific axes, and is essentially all the settings for each panel. There's a bunch of pre-defined parameters to adjust these settings. main() calls this method for each data set and puts in the settings. main() also contains whole-figure settings (draw_model_handle(ax, pos, size) is a helper for plot_subplot(...)). See comments
+# More information
 You should be able to ignore the following folders:
 > ```main_working_folder```, contains my draft work 
 > 
