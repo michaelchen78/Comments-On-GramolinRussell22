@@ -7,11 +7,11 @@
 # Comment on "Transverse charge density and the radius of the proton"
 
 This repository contains 
-Extractions of the charge radius for all data sets can be completed using the ```different_input_data.py``` script.
+Extractions of the charge radius for all data sets can be completed using the ```different_input_sets.py``` script.
 
-The ```different_input_data.py``` script runs the extractions by referencing the ```modified_fit.py``` script, which is a modified version of the ```fit.py``` script from Gramolin and Russell's PYTHON code. All modifications are recorded in the text file ```edits.txt```.
+The ```different_input_sets.py``` script runs the extractions by referencing the ```modified_fit.py``` script, which is a modified version of the ```fit.py``` script from Gramolin and Russell's PYTHON code. All modifications are recorded in the text file ```edits.txt```.
 
-Instructions on running ```different_input_data.py```:
+Instructions on running ```different_input_sets.py```:
 > In the main method, 
 
 
