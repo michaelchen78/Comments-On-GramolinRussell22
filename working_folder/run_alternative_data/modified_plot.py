@@ -36,9 +36,9 @@ def calc_interval(calc_func, x_range, param_list, order, Q2_range=np.linspace(0,
 
 def calc_params(data, order, reg_param):
     """Run fit and get model parameters and covariance."""
-    params, _, _, _, cov = fit.fit(data, data, order, reg_param)
-    params = params[fit.N_NORM_PARAMS :]
-    cov = cov[fit.N_NORM_PARAMS :, fit.N_NORM_PARAMS :]
+    params, _, _, _, cov = modified_fit.fit(data, data, order, reg_param)
+    params = params[modified_fit.N_NORM_PARAMS :]
+    cov = cov[modified_fit.N_NORM_PARAMS :, modified_fit.N_NORM_PARAMS :]
     return params, cov
 
 
@@ -46,10 +46,10 @@ def calc_sys_bands(calc_func, x_range, data, order, reg_param):
     """Calculate systematic error bands for given quantity."""
     params, _ = calc_params(data, order, reg_param)
     f1, f2 = calc_func(x_range, params, order)
-    mincut_params = fit.fit_systematic_variant("cs_mincut", data, order, reg_param)[0]
-    maxcut_params = fit.fit_systematic_variant("cs_maxcut", data, order, reg_param)[0]
-    sysup_params = fit.fit_systematic_variant("cs_sysup", data, order, reg_param)[0]
-    syslow_params = fit.fit_systematic_variant("cs_syslow", data, order, reg_param)[0]
+    mincut_params = modified_fit.fit_systematic_variant("cs_mincut", data, order, reg_param)[0]
+    maxcut_params = modified_fit.fit_systematic_variant("cs_maxcut", data, order, reg_param)[0]
+    sysup_params = modified_fit.fit_systematic_variant("cs_sysup", data, order, reg_param)[0]
+    syslow_params = modified_fit.fit_systematic_variant("cs_syslow", data, order, reg_param)[0]
     mincut_f1, mincut_f2 = calc_func(x_range, mincut_params, order)
     maxcut_f1, maxcut_f2 = calc_func(x_range, maxcut_params, order)
     sysup_f1, sysup_f2 = calc_func(x_range, sysup_params, order)
@@ -93,7 +93,7 @@ def plot_f1_f2(data, order, reg_param):
     # Plot the form factor slope:
     plt.plot(slope_x, slope_y, ls="--", color="black", lw=1)
 
-    if fit.covariance_bad(cov):
+    if modified_fit.covariance_bad(cov):
         print("Warning: Covariance ill-conditioned, will not plot confidence intervals")
         draw_confidence = False
     else:
@@ -174,14 +174,14 @@ def plot_rhos(data, order, reg_param):
         plt.text(1.1, 0.079, r"$\rho_2$", color="#0000FF")
 
 
-def plot_ge_gm(cs_data, order, reg_param, R_data=read_Rosenbluth_data(), Q2_max=1, precision=100):  # [MOD: made rosenbluth data hard coded]
+# only method that I modified (I also modified main but it was a result of these modifications)
+def plot_ge_gm(cs_data, order, reg_param, Q2_max=1.4, precision=100, R_data=read_Rosenbluth_data()):  # [MOD: made rosenbluth data hard coded] I think so I can call the method without having it
     """Plot the Sachs electric and magnetic form factors."""
     params, cov = calc_params(cs_data, order, reg_param)
-    #Q2_range = np.linspace(0, Q2_max, 100)  # [MOD HERE]
     Q2_range = np.linspace(0, Q2_max, int(Q2_max*precision + 1))  # [MOD HERE]
     GE, GM = calc_ge_gm(Q2_range, params, order)
 
-    if fit.covariance_bad(cov):
+    if modified_fit.covariance_bad(cov):
         print("Warning: Covariance ill-conditioned, will not plot confidence intervals")
         draw_confidence = False
     else:
@@ -190,7 +190,9 @@ def plot_ge_gm(cs_data, order, reg_param, R_data=read_Rosenbluth_data(), Q2_max=
     # Calculate statistical uncertainties:
     if draw_confidence:
         '''
-        # [MOD: ENSURING NORMALITY]
+        # [MOD: ENSURING NORMALITY] 
+        # This is only used if ratio distribution is used (and even at that point it is optional)
+        # It iterates until a certain percentage of the ge and gm at each q2 are normal
         normal = False
         counter = 0
         min_normality_factor = 0.8  # the required percentage of normal Q^2
@@ -221,6 +223,7 @@ def plot_ge_gm(cs_data, order, reg_param, R_data=read_Rosenbluth_data(), Q2_max=
         print("Number of normal samples: ", n_normal)
         params = test_params
         '''
+        # for everything besides ration distribution, these lines below return the relevant data
         params = np.random.multivariate_normal(params, cov, size=N_SAMPLES)
         interval = calc_interval(calc_ge_gm, Q2_range, params, order)
         # Calculate systematic uncertainties:
@@ -228,6 +231,7 @@ def plot_ge_gm(cs_data, order, reg_param, R_data=read_Rosenbluth_data(), Q2_max=
 
     '''
     # [MOD: CLEAN]
+    # I just commented out all of their plotting so it doesn't interfere
     fig = plt.figure(figsize=(10, 3.5))
     plt.subplots_adjust(wspace=0.35)
 
@@ -281,13 +285,12 @@ def plot_ge_gm(cs_data, order, reg_param, R_data=read_Rosenbluth_data(), Q2_max=
     return GE, GM, Q2_range, interval, f1_up, f1_low, f2_up, f2_low  # [MOD: to make plot_alt_data.py run]
 
 
-
 def plot_cs(data, order, reg_param):
     """Plot the measured cross sections with best fits."""
-    params, _, _, _, _ = fit.fit(data, data, order, reg_param)
+    params, _, _, _, _ = modified_fit.fit(data, data, order, reg_param)
 
     # Renormalize the cross sections:
-    norm_params = np.concatenate([[1], params[: fit.N_NORM_PARAMS]])
+    norm_params = np.concatenate([[1], params[: modified_fit.N_NORM_PARAMS]])
     norm = np.prod(norm_params[data["norms"]], axis=1)
     data["cs"] = norm * data["cs"]
     data["delta_cs"] = norm * data["delta_cs"]
@@ -295,12 +298,12 @@ def plot_cs(data, order, reg_param):
     fig_S1 = plt.figure(figsize=(10, 13))
     plt.subplots_adjust(wspace=0.25, hspace=0.3)
 
-    for i, energy in enumerate(fit.BEAM_ENERGIES):
+    for i, energy in enumerate(modified_fit.BEAM_ENERGIES):
         ax = fig_S1.add_subplot(3, 2, i + 1)
 
         Q2max = np.amax(data["Q2"][data["E"] == energy])
         Q2val = np.linspace(0, Q2max, 100)
-        curve = calc_cs(0.001 * energy, Q2val, params[fit.N_NORM_PARAMS :], order)
+        curve = calc_cs(0.001 * energy, Q2val, params[modified_fit.N_NORM_PARAMS :], order)
 
         # Spectrometer A:
         Q2 = data["Q2"][(data["E"] == energy) & (data["spec"] == "A")]
@@ -337,7 +340,7 @@ def main(order, reg_param):
     print("Model: N = {}, lambda = {}".format(order, reg_param))
 
     # Read the cross section and Rosenbluth data:
-    cs_data = fit.read_cs_data("data/CrossSections.dat")[0]  # [MOD: MAKE COMPATIBLE WITH fit.read_cs_data()]
+    cs_data = modified_fit.read_cs_data("data/CrossSections.dat")[0]  # [MOD: MAKE COMPATIBLE WITH modified_fit.read_cs_data()]
     Rosenbluth_data = read_Rosenbluth_data()
 
     # Figure 1:
@@ -369,5 +372,5 @@ def main(order, reg_param):
 
 
 if __name__ == "__main__":
-    ARGS = fit.parse_args()
+    ARGS = modified_fit.parse_args()
     main(ARGS.order, ARGS.reg_param)
