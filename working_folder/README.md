@@ -1,6 +1,6 @@
 I thought I'd start off with some brief notes on ```run_alternative_data.plot_alt_data.py```, since that's most important. Below the notes is more information on the directory.
 # Notes on ```plot_alt_data.py```
-> The methods FROM assign_band_curves(interval) TO calc_sys_error_original(...) are all for calculating error bands.
+> The methods FROM assign_band_curves(interval) TO calc_sys_error_original(...), inclusive, are all for calculating error bands.
 
 > plot_data_set(...) plots the asymmetry data and Alarcon and Weiss along with a given data set's Gramolin model onto a set of axes (representing a panel)
 
