@@ -14,6 +14,6 @@ Instructions for running ```different_input_sets.py```:
 
 > Note on run time: the run time of the script will increase with the size of ```lambdas``` and the value of ```max_order```. The implementation in this repository has a ```max_order``` of 8 and 151 elements in ```lambdas```, and will take hours on most machines.
 
-> Output will be printed into a .txt file called ```output.txt```
+> Output will be printed into a .txt file called ```output.txt```. (```output.txt (original)``` in this repository is our output for this implementation)
 
 The folder called 'gramolin_repo' is an exact copy of the repository containing Gramolin and Russell's original PYTHON code, which can be found at: https://github.com/gramolin/radius. The folder is included for reference and for one file/module, plot.py, which is imported and utilized by the modified_fit.py script. 
