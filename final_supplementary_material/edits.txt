@@ -1,4 +1,4 @@
-NOTE: line changes refer to original file; for added lines, line changes include comments acting as edit labels
+NOTE: line changes refer to original file; comments acting as edit labels are included in line counts.
 All edits were made to fit.py (now modified_fit.py); different_input_sets.py is original code.
 
 Edit 1: make the data file read by read_cs_data() a parameter of the method
@@ -16,5 +16,4 @@ C: added a return statement returing the un-rounded values of chi^2_train and ch
 D: edit is not used by the comment, but allows the code to run as the original code did; replaced line 180 with 3 lines
 
 Edit 4: changed import statement importing methods from models.py as models.py has a different relative path compared to the original folder; changed line 11
-
 

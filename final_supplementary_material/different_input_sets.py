@@ -4,7 +4,7 @@ import warnings
 import sys
 
 
-# Returns chi^2_train and chi^2_test from group validation with the best normalizations,
+# Returns chi^2_train and chi^2_test from group validation (with best norms)
 def perform_group_val_with_best_normalizations(order, reg_param, n_norm_params, data):
     # Mirrors behavior in original modified_fit.py lines 173-180
     best_params, _, _, _, _ = modified_fit.fit(data, data, order, reg_param)
@@ -113,29 +113,36 @@ def print_table_replications(max_N, lambdas, data_filepath, data_file_name):
 def main():
     sys.stdout = open("output.txt", "w")
 
+    '''Instructions:
+    '''
+
     '''Run 1: A1'''
-    max_order = 9
+    max_order = 8
     lambdas = np.linspace(0, 1.5, 151)
     data_filepath = "data/a1_cs.dat"
-    print_table_replications(max_order, lambdas, data_filepath, "A1")
+    data_file_name = "A1"
+    print_table_replications(max_order, lambdas, data_filepath, data_file_name)
 
     '''Run 2: Rebinned A1'''
-    max_order = 9
+    max_order = 8
     lambdas = np.linspace(0, 1.5, 151)
     data_filepath = "data/rebinned_a1_cs.dat"
-    print_table_replications(max_order, lambdas, data_filepath, "Rebinned A1")
+    data_file_name = "Rebinned A1"
+    print_table_replications(max_order, lambdas, data_filepath, data_file_name)
 
     '''Run 3: A1 + PRad'''
-    max_order = 9
+    max_order = 8
     lambdas = np.linspace(0, 1.5, 151)
     data_filepath = "data/a1_with_prad_cs.dat"
-    print_table_replications(max_order, lambdas, data_filepath, "A1 + PRad")
+    data_file_name = "A1 + PRad"
+    print_table_replications(max_order, lambdas, data_filepath, data_file_name)
 
     '''Run 4: Rebinned + PRad'''
-    max_order = 9
+    max_order = 8
     lambdas = np.linspace(0, 1.5, 151)
     data_filepath = "data/rebinned_with_prad_cs.dat"
-    print_table_replications(max_order, lambdas, data_filepath, "Rebinned + PRad")
+    data_file_name = "Rebinned + PRad"
+    print_table_replications(max_order, lambdas, data_filepath, data_file_name)
 
     sys.stdout.close()
 
