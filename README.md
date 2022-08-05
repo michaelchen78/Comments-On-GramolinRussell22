@@ -1,5 +1,7 @@
 There are two main directories: ```final_supplementary_material``` and ```working_folder```.
 
+The plot code is in ```working_folder``` > ```run_alternative_data``` > ```plot_alt_data.py```.
+
 Both directories have their own README, which you should refer to for the contents of that directory. In summary....
  > ```final_supplementary_material``` contains the code and files that are intended for the supplementary material (which we discussed) -- so just the things needed for running the different input data sets. 
  
